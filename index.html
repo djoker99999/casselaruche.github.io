@@ -23,6 +23,7 @@
       overflow-x: hidden;
     }
 
+    /* CORRECTION : Réduction de l'opacité de l'overlay pour plus de luminosité */
     body::before {
       content: '';
       position: fixed;
@@ -30,8 +31,13 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.3); /* Changé de 0.6 à 0.3 pour plus de luminosité */
       z-index: -1;
+    }
+
+    /* CORRECTION : Augmentation de la luminosité et du contraste de l'image de fond */
+    body {
+      filter: brightness(1.1) contrast(1.1); /* Amélioration de la luminosité et du contraste */
     }
 
     .game-container {
