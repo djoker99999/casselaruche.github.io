@@ -23,7 +23,6 @@
       overflow-x: hidden;
     }
 
-    /* CORRECTION : Réduction de l'opacité de l'overlay pour plus de luminosité */
     body::before {
       content: '';
       position: fixed;
@@ -31,13 +30,12 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.3); /* Changé de 0.6 à 0.3 pour plus de luminosité */
+      background: rgba(0, 0, 0, 0.3);
       z-index: -1;
     }
 
-    /* CORRECTION : Augmentation de la luminosité et du contraste de l'image de fond */
     body {
-      filter: brightness(1.1) contrast(1.1); /* Amélioration de la luminosité et du contraste */
+      filter: brightness(1.1) contrast(1.1);
     }
 
     .game-container {
@@ -112,6 +110,21 @@
       align-items: center;
       width: 100%;
       min-height: 200px;
+    }
+
+    /* Image de récompense en arrière-plan */
+    .reward-background {
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      z-index: 1;
+      opacity: 0.4;
+      border-radius: 50%;
+      transition: all 0.5s ease;
+      filter: blur(2px) brightness(1.2);
     }
 
     .hive {
@@ -310,7 +323,6 @@
       100% { opacity: 0; transform: scale(1) translateY(-30px); }
     }
 
-    /* Styles pour le marteau */
     .hammer {
       position: absolute;
       width: 60px;
@@ -424,6 +436,7 @@
       text-transform: uppercase;
       font-weight: bold;
       letter-spacing: 0.5px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     }
 
     button:hover {
@@ -448,8 +461,11 @@
       margin: 15px 0;
       font-size: 1.1em;
       font-weight: bold;
-      text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+      text-shadow: 0 0 15px rgba(0, 0, 0, 0.9), 0 3px 6px rgba(0, 0, 0, 0.8), 2px 2px 6px rgba(0, 0, 0, 0.7);
       min-height: 25px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 8px;
+      border-radius: 10px;
     }
 
     .result-box {
@@ -519,6 +535,7 @@
       display: none;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       border: 2px solid rgba(255,255,255,0.2);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
     }
 
     .reward-image {
@@ -547,6 +564,7 @@
       transition: all 0.3s ease;
       border: 2px solid transparent;
       font-size: 14px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     }
 
     .difficulty-btn.easy {
@@ -567,7 +585,6 @@
       transform: scale(1.05);
     }
 
-    /* Styles pour mobile */
     @media (max-width: 480px) {
       .game-container {
         padding: 15px;
@@ -581,6 +598,11 @@
       .hive {
         width: 160px;
         height: 140px;
+      }
+
+      .reward-background {
+        width: 200px;
+        height: 200px;
       }
       
       .instructions {
@@ -629,7 +651,6 @@
       }
     }
 
-    /* Effets de particules */
     .particles-container {
       position: absolute;
       top: 0;
@@ -650,7 +671,6 @@
       z-index: 2;
     }
 
-    /* Styles améliorés pour la fin du jeu */
     .victory-message {
       font-size: 1.5em;
       font-weight: bold;
@@ -691,7 +711,7 @@
   <div class="game-container" id="gameContainer">
     <div class="combo-indicator" id="comboIndicator">COMBO x0</div>
 
-    <h1>🍯 La Ruche Magique !</h1>
+    <h1>🍯 Bienvenue à la ruche de Bee Bee</h1>
     
     <div class="difficulty-selector">
       <div class="difficulty-btn easy active" data-difficulty="easy">Facile</div>
@@ -700,6 +720,7 @@
     </div>
     
     <div class="hive-container">
+      <div class="reward-background" id="rewardBackground"></div>
       <div class="hive easy" id="hive"></div>
       <div class="particles-container" id="particlesContainer"></div>
     </div>
@@ -756,10 +777,17 @@
     const comboIndicator = document.getElementById("comboIndicator");
     const rewardImage = document.getElementById("rewardImage");
     const particlesContainer = document.getElementById("particlesContainer");
+    const rewardBackground = document.getElementById("rewardBackground");
 
     const impactEffects = ["💥", "🔥", "⭐", "💫", "✨", "💢"];
 
-    // Système audio corrigé
+    // Images des récompenses selon la difficulté
+    const rewardImages = {
+      easy: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkZIBKVuctd-81US1fPCxkxx5qaA3KNSzRVw&s",
+      medium: "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/8520d47b59c202a4534c1560a355ae06~tplv-obj.webp",
+      hard: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRck3UIOweF0fz3r3AQRfZeExZSGxI_yJaDtm54uXIp7210gJBnen4B1qFTNsUSzgfD2yQ&usqp=CAU"
+    };
+
     function initAudioContext() {
       try {
         if (!audioContext) {
@@ -794,7 +822,6 @@
         oscillator.start(context.currentTime);
         oscillator.stop(context.currentTime + duration);
       } catch (e) {
-        // Silence en cas d'erreur
       }
     }
 
@@ -814,7 +841,6 @@
       setTimeout(() => createSound(600, 0.2, 'sine'), 200);
     }
 
-    // Fonction pour créer un marteau animé
     function createHammer() {
       const hammer = document.createElement('div');
       hammer.className = 'hammer';
@@ -828,7 +854,6 @@
       hammer.appendChild(hammerHead);
       hammer.appendChild(hammerHandle);
       
-      // Positionner le marteau au-dessus de la ruche
       const hiveRect = hive.getBoundingClientRect();
       const containerRect = hive.parentElement.getBoundingClientRect();
       
@@ -840,12 +865,10 @@
       return hammer;
     }
 
-    // Fonction pour animer le marteau
     function animateHammer() {
       const hammer = createHammer();
       hammer.classList.add('hammer-hit');
       
-      // Supprimer le marteau après l'animation
       setTimeout(() => {
         if (hammer.parentElement) {
           hammer.parentElement.removeChild(hammer);
@@ -853,7 +876,6 @@
       }, 600);
     }
 
-    // Fonction pour créer des particules d'impact
     function createHitParticles() {
       for (let i = 0; i < 8; i++) {
         const particle = document.createElement('div');
@@ -914,7 +936,6 @@
       }
     }
 
-    // Fonction d'attaque CORRIGÉE avec protection anti-clics multiples
     function attack() {
       if (currentHP <= 0 || isAttacking) return;
       
@@ -925,7 +946,6 @@
       let rosesEarned = 0;
       let wasCracked = hive.classList.contains('cracked');
       
-      // Animer le marteau
       animateHammer();
       
       playHitSound();
@@ -964,8 +984,6 @@
         coupCounter++;
         actualHits++;
         totalHits++;
-
-        // 1 coup = -1 point de vie
         currentHP--;
 
         hitsUntilCoin--;
@@ -1023,31 +1041,34 @@
       }
     }
 
+    function updateRewardBackground() {
+      rewardBackground.style.backgroundImage = `url('${rewardImages[currentDifficulty]}')`;
+    }
+
     function endGame() {
       let recompense = 0;
       let rewardText = "";
       let victoryText = "";
       let rewardImg = "";
       
-      // Déterminer la récompense selon la difficulté
       switch(currentDifficulty) {
         case "easy":
-          recompense = 1; // Léon chaton
+          recompense = 1;
           rewardText = "Léon chaton !";
           victoryText = "Félicitations ! Tu as découvert un adorable compagnon !";
-          rewardImg = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkZIBKVuctd-81US1fPCxkxx5qaA3KNSzRVw&s";
+          rewardImg = rewardImages.easy;
           break;
         case "medium":
-          recompense = 10000; // Planète merveilleuse
+          recompense = 10000;
           rewardText = "planète merveilleuse !";
           victoryText = "Incroyable ! Tu as trouvé un trésor interstellaire !";
-          rewardImg = "https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/8520d47b59c202a4534c1560a355ae06~tplv-obj.webp";
+          rewardImg = rewardImages.medium;
           break;
         case "hard":
-          recompense = 30000; // Lion
+          recompense = 30000;
           rewardText = "lion majestueux !";
           victoryText = "Victoire totale ! Tu as dompté le roi de la jungle !";
-          rewardImg = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRck3UIOweF0fz3r3AQRfZeExZSGxI_yJaDtm54uXIp7210gJBnen4B1qFTNsUSzgfD2yQ&usqp=CAU";
+          rewardImg = rewardImages.hard;
           break;
       }
       
@@ -1058,7 +1079,6 @@
       setTimeout(() => {
         rewardImage.style.backgroundImage = `url('${rewardImg}')`;
         
-        // Message de victoire clair et épuré
         coinsResult.innerHTML = `
           <div class="difficulty-badge ${currentDifficulty}">NIVEAU ${currentDifficulty.toUpperCase()}</div><br>
           <strong>RÉCOMPENSE :</strong><br>
@@ -1080,7 +1100,6 @@
         btn.classList.remove('active');
       });
       
-      // si l'élément existe (sécurité)
       const btnEl = document.getElementById(`mode${mode}`);
       if (btnEl) btnEl.classList.add('active');
 
@@ -1090,21 +1109,19 @@
     function setDifficulty(difficulty) {
       currentDifficulty = difficulty;
       
-      // Mettre à jour l'apparence des boutons de difficulté
       document.querySelectorAll('.difficulty-btn').forEach(btn => {
         btn.classList.remove('active');
       });
       document.querySelector(`.difficulty-btn.${difficulty}`).classList.add('active');
       
-      // Mettre à jour l'apparence de la ruche
       hive.className = "hive " + difficulty;
       
-      // Réinitialiser le jeu avec la nouvelle difficulté
+      updateRewardBackground();
+      
       initGame();
     }
 
     function initGame() {
-      // Définir les points de vie selon la difficulté
       switch(currentDifficulty) {
         case "easy":
           maxHP = 50000;
@@ -1113,7 +1130,7 @@
           maxHP = 100000;
           break;
         case "hard":
-          maxHP = 200000; // 200 000 HP pour le niveau difficile
+          maxHP = 200000;
           break;
       }
       
@@ -1132,13 +1149,13 @@
       resultContainer.classList.add("hidden");
       comboIndicator.style.display = "none";
 
-      // reset des compteurs visibles (sécurité si tu veux les afficher autrement)
+      updateRewardBackground();
+
       coupCounter = 0;
       totalHits = 0;
       hitsUntilCoin = 4;
     }
 
-    // Événements CORRIGÉS
     document.getElementById("attackBtn").addEventListener("click", attack);
     document.getElementById("resetBtn").addEventListener("click", initGame);
 
@@ -1151,14 +1168,12 @@
     document.getElementById("mode500").addEventListener("click", () => setAttackMode(500));
     document.getElementById("mode1000").addEventListener("click", () => setAttackMode(1000));
 
-    // Sélecteur de difficulté
     document.querySelectorAll('.difficulty-btn').forEach(btn => {
       btn.addEventListener('click', function() {
         setDifficulty(this.getAttribute('data-difficulty'));
       });
     });
 
-    // Raccourcis clavier
     document.addEventListener('keydown', (e) => {
       if (isAttacking) return;
       
@@ -1211,7 +1226,6 @@
       }
     });
 
-    // Reset combo après inactivité
     setInterval(() => {
       const currentTime = Date.now();
       if (currentTime - lastHitTime > 3000 && combo > 0) {
