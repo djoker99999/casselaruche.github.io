@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -854,7 +853,7 @@
 
     <div class="attack-modes">
       <div id="mode1" class="attack-mode-image active">
-        <img src="https://i.ibb.co/WNXDxn2y/IMG-7354-Photoroom.png" alt="Rose - 1 coup">
+        <img src="https://i.ibb.co/VckYwyzJ/IMG-7367.png" alt="Rose - 1 coup">
         <div class="attack-mode-label">1 coup</div>
       </div>
       <div id="mode10" class="attack-mode-image">
@@ -1265,6 +1264,23 @@
       document.querySelector(`.difficulty-btn.${difficulty}`).classList.add('active');
       
       hive.className = "hive " + difficulty;
+      
+      // Masquer les petits modes d'attaque pour le niveau impossible
+      if (difficulty === 'impossible') {
+        document.getElementById('mode1').style.display = 'none';
+        document.getElementById('mode10').style.display = 'none';
+        document.getElementById('mode30').style.display = 'none';
+        
+        // Si un mode masqué est actif, passer à 100 coups
+        if (attackMode === 1 || attackMode === 10 || attackMode === 30) {
+          setAttackMode(100);
+        }
+      } else {
+        // Réafficher tous les modes pour les autres difficultés
+        document.getElementById('mode1').style.display = 'flex';
+        document.getElementById('mode10').style.display = 'flex';
+        document.getElementById('mode30').style.display = 'flex';
+      }
       
       initGame();
     }
