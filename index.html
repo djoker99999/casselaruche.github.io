@@ -895,6 +895,12 @@
       <p id="coinsResult" class="reward-text"></p>
       <div id="victoryMessage" class="victory-message"></div>
     </div>
+
+    <div id="bonusContainer" class="hidden result-box">
+      <h3>🎉 Bonus ! 🎉</h3>
+      <p class="reward-text">Vous avez gagné<br><strong style="font-size: 1.8em; color: #ffd700;">1000 pièces</strong></p>
+      <button id="continueBtn" style="margin-top: 15px;">Continuer</button>
+    </div>
   </div>
 
   <script>
@@ -907,6 +913,7 @@
     let isAttacking = false;
     let audioContext = null;
     let currentDifficulty = "easy";
+    let bonusShown = false;
 
     const hive = document.getElementById("hive");
     const message = document.getElementById("message");
@@ -918,6 +925,8 @@
     const comboIndicator = document.getElementById("comboIndicator");
     const rewardImage = document.getElementById("rewardImage");
     const particlesContainer = document.getElementById("particlesContainer");
+    const bonusContainer = document.getElementById("bonusContainer");
+    const continueBtn = document.getElementById("continueBtn");
 
     const impactEffects = ["💥", "🔥", "⭐", "💫", "✨", "💢"];
 
@@ -1178,6 +1187,26 @@
     }
 
     function updateUI() {
+      // Vérifier si on a infligé 80% de dégâts (il reste 20% de HP) pour afficher le bonus
+      const hpPercentage = (currentHP / maxHP) * 100;
+      if (hpPercentage <= 20 && !bonusShown && currentHP > 0) {
+        bonusShown = true;
+        
+        // Déterminer le montant du bonus selon la difficulté
+        let bonusAmount = 1000;
+        if (currentDifficulty === 'hard' || currentDifficulty === 'impossible') {
+          bonusAmount = 2000;
+        }
+        
+        // Mettre à jour le texte du bonus
+        document.querySelector('#bonusContainer .reward-text').innerHTML = 
+          `Vous avez gagné<br><strong style="font-size: 1.8em; color: #ffd700;">${bonusAmount} pièces</strong>`;
+        
+        setTimeout(() => {
+          bonusContainer.classList.remove("hidden");
+        }, 500);
+      }
+      
       if (currentHP === 0) {
         hive.className = "hive broken " + currentDifficulty;
         message.textContent = "💥 La ruche magique s'est brisée !";
@@ -1315,11 +1344,13 @@
       combo = 0;
       lastHitTime = 0;
       isAttacking = false;
+      bonusShown = false;
       
       hive.className = "hive " + currentDifficulty;
       message.textContent = `Ruche magique ${difficultyNames[currentDifficulty]} - À tout moment la ruche peut se briser...`;
       
       resultContainer.classList.add("hidden");
+      bonusContainer.classList.add("hidden");
       comboIndicator.style.display = "none";
 
       coupCounter = 0;
@@ -1329,6 +1360,9 @@
 
     document.getElementById("attackBtn").addEventListener("click", attack);
     document.getElementById("resetBtn").addEventListener("click", initGame);
+    document.getElementById("continueBtn").addEventListener("click", () => {
+      bonusContainer.classList.add("hidden");
+    });
 
     document.getElementById("mode1").addEventListener("click", () => setAttackMode(1));
     document.getElementById("mode10").addEventListener("click", () => setAttackMode(10));
