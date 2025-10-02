@@ -1269,8 +1269,8 @@
       
       hive.className = "hive " + difficulty;
       
-      // Masquer les petits modes d'attaque pour le niveau impossible
-      if (difficulty === 'impossible') {
+      // Masquer les petits modes d'attaque pour les niveaux difficile et impossible
+      if (difficulty === 'hard' || difficulty === 'impossible') {
         document.getElementById('mode1').style.display = 'none';
         document.getElementById('mode10').style.display = 'none';
         document.getElementById('mode30').style.display = 'none';
@@ -1281,7 +1281,7 @@
           setAttackMode(100);
         }
       } else {
-        // Réafficher tous les modes pour les autres difficultés
+        // Réafficher tous les petits modes pour les niveaux facile et moyen
         document.getElementById('mode1').style.display = 'flex';
         document.getElementById('mode10').style.display = 'flex';
         document.getElementById('mode30').style.display = 'flex';
