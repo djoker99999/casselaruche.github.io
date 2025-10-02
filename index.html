@@ -876,6 +876,10 @@
         <img src="https://i.ibb.co/JMPfpWV/IMG-5851.png" alt="Galaxie - 1000 coups">
         <div class="attack-mode-label">1000 coups</div>
       </div>
+      <div id="mode5000" class="attack-mode-image" style="display: none;">
+        <img src="https://i.ibb.co/hxXnkQh7/IMG-5861.png" alt="Ultra - 5000 coups">
+        <div class="attack-mode-label">5000 coups</div>
+      </div>
     </div>
 
     <div class="controls">
@@ -1270,6 +1274,7 @@
         document.getElementById('mode1').style.display = 'none';
         document.getElementById('mode10').style.display = 'none';
         document.getElementById('mode30').style.display = 'none';
+        document.getElementById('mode5000').style.display = 'flex';
         
         // Si un mode masqué est actif, passer à 100 coups
         if (attackMode === 1 || attackMode === 10 || attackMode === 30) {
@@ -1280,6 +1285,7 @@
         document.getElementById('mode1').style.display = 'flex';
         document.getElementById('mode10').style.display = 'flex';
         document.getElementById('mode30').style.display = 'flex';
+        document.getElementById('mode5000').style.display = 'none';
       }
       
       initGame();
@@ -1330,6 +1336,7 @@
     document.getElementById("mode100").addEventListener("click", () => setAttackMode(100));
     document.getElementById("mode500").addEventListener("click", () => setAttackMode(500));
     document.getElementById("mode1000").addEventListener("click", () => setAttackMode(1000));
+    document.getElementById("mode5000").addEventListener("click", () => setAttackMode(5000));
 
     document.querySelectorAll('.difficulty-btn').forEach(btn => {
       btn.addEventListener('click', function() {
