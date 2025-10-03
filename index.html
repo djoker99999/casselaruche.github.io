@@ -1158,6 +1158,8 @@
     const SPIN_HITS_NEEDED = 20;
     let jackpotLevel = 0;
     let isSpinning = false;
+    let spinJackpotRoses = 1000;
+    let spinsCount = 0;
 
     const numberTypes = [
       { value: 0, name: 'Zéro', colorClass: 'number-0' },
@@ -1247,6 +1249,13 @@
         coupCounter++;
         totalHits++;
         spinHitsCounter++;
+        spinsCount++;
+        
+        // Ajouter 1 rose au jackpot tous les 5 coups
+        if (spinsCount % 5 === 0) {
+          spinJackpotRoses++;
+          updateSpinJackpotDisplay();
+        }
         
         updateJackpotBar();
         
@@ -1289,43 +1298,43 @@
     }
 
     function checkSpinResult(finalNumbers) {
-      const firstNumber = finalNumbers[0];
-      const allSame = finalNumbers.every(num => num === firstNumber);
+      // Vérifier si les 6 chiffres sont tous des 7
+      const allSevens = finalNumbers.every(num => num === 7);
       
-      if (allSame) {
-        const winningNumber = numberTypes[firstNumber];
-        message.textContent = `🎰 JACKPOT! 6x CHIFFRE ${winningNumber.value}! 🎰`;
+      if (allSevens) {
+        // JACKPOT ! Tous les chiffres sont des 7
+        message.textContent = `🎰 JACKPOT! 6x CHIFFRE 7! Tu gagnes ${spinJackpotRoses} roses! 🎰`;
         createSound(800, 0.3, 'sine');
         setTimeout(() => createSound(1000, 0.2, 'sine'), 200);
         setTimeout(() => createSound(1200, 0.1, 'sine'), 400);
         
+        // Animation de victoire pour tous les rouleaux
         const reels = [reel1, reel2, reel3, reel4, reel5, reel6];
         reels.forEach(reel => {
           reel.classList.add('winning');
         });
         
-        rosesEarnedThisDiamond += 100;
-        showRoseGain(100);
+        // Donner le jackpot en roses
+        rosesEarnedThisDiamond += spinJackpotRoses;
+        showRoseGain(spinJackpotRoses);
         
+        // Réinitialiser le jackpot
+        spinJackpotRoses = 0;
+        updateSpinJackpotDisplay();
+        
+        // Réinitialiser l'animation après 2 secondes
         setTimeout(() => {
           reels.forEach(reel => {
             reel.classList.remove('winning');
           });
         }, 2000);
-      } else {
-        const numberCounts = {};
-        finalNumbers.forEach(numberIndex => {
-          const numberValue = numberTypes[numberIndex].value;
-          numberCounts[numberValue] = (numberCounts[numberValue] || 0) + 1;
-        });
-        
-        const maxCount = Math.max(...Object.values(numberCounts));
-        
-        if (maxCount >= 3) {
-          rosesEarnedThisDiamond += maxCount * 5;
-          showRoseGain(maxCount * 5);
-          message.textContent = `🎉 ${maxCount} chiffres identiques ! +${maxCount * 5} points`;
-        }
+      }
+    }
+
+    function updateSpinJackpotDisplay() {
+      const spinTitle = document.querySelector('.spin-title');
+      if (spinTitle) {
+        spinTitle.textContent = `🎰 SPIN DES CHIFFRES - Jackpot: ${spinJackpotRoses} 🌹`;
       }
     }
 
@@ -1752,6 +1761,8 @@
       jackpotLevel = 0;
       isSpinning = false;
       spinButton.disabled = false;
+      spinJackpotRoses = 1000;
+      spinsCount = 0;
       
       const reels = [reel1, reel2, reel3, reel4, reel5, reel6];
       reels.forEach((reel, index) => {
@@ -1771,6 +1782,7 @@
       hitsUntilCoin = 4;
       
       updateJackpotBar();
+      updateSpinJackpotDisplay();
     }
 
     document.getElementById("attackBtn").addEventListener("click", attack);
