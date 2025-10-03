@@ -1102,7 +1102,7 @@
     </div>
 
     <div class="spin-container">
-      <div class="spin-title">🔮 Trouve le chiffre mystère 🔮</div>
+      <div class="spin-title">🔮 Trouve le code pour découvrir plein de lots de 1k à 10k tirage aléatoire 🔮</div>
       <div class="spin-reels">
         <div class="spin-reel" id="reel1">0</div>
         <div class="spin-reel" id="reel2">1</div>
@@ -1230,6 +1230,8 @@
     const continueBtn = document.getElementById("continueBtn");
 
     const spinButton = document.getElementById("spinButton");
+    const spin50Button = document.getElementById("spin50Button");
+    const spin100Button = document.getElementById("spin100Button");
     const reel1 = document.getElementById("reel1");
     const reel2 = document.getElementById("reel2");
     const reel3 = document.getElementById("reel3");
@@ -1278,7 +1280,12 @@
     }
 
     async function autoSpin(count) {
-      if (isAutoSpinning || currentHP <= 0) return;
+      if (isAutoSpinning) {
+        console.log("Auto-spin déjà en cours");
+        return;
+      }
+      
+      console.log(`Démarrage de ${count} spins automatiques`);
       
       isAutoSpinning = true;
       autoSpinCount = count;
@@ -1289,45 +1296,68 @@
       document.getElementById('spin100Button').disabled = true;
       
       for (let i = 0; i < count; i++) {
-        if (currentHP <= 0) break;
+        console.log(`Spin ${i + 1}/${count}`);
         
         await spinReels();
         
-        // Petite pause entre chaque spin
-        await new Promise(resolve => setTimeout(resolve, 100));
+        // Pause entre chaque spin pour qu'on puisse voir l'animation
+        await new Promise(resolve => setTimeout(resolve, 400));
         
         autoSpinCount--;
       }
+      
+      console.log("Auto-spin terminé");
       
       isAutoSpinning = false;
       autoSpinCount = 0;
       
       // Réactiver les boutons
-      if (currentHP > 0) {
-        spinButton.disabled = false;
-        document.getElementById('spin50Button').disabled = false;
-        document.getElementById('spin100Button').disabled = false;
-      }
+      spinButton.disabled = false;
+      document.getElementById('spin50Button').disabled = false;
+      document.getElementById('spin100Button').disabled = false;
     }
 
     function spinReels() {
       return new Promise((resolve) => {
-        if (isSpinning || currentHP <= 0) {
+        if (currentHP <= 0) {
           resolve();
           return;
         }
         
-        if (currentHP > 0) {
-          animateHammer();
-          playHitSound();
-          createHitParticles();
-          createImpactEffect();
-          updateCombo();
+        // Autoriser le spin même si isSpinning est vrai pendant l'auto-spin
+        if (isSpinning && !isAutoSpinning) {
+          resolve();
+          return;
+        }
+        
+        isSpinning = true;
+        
+        // Ne désactiver les boutons que si ce n'est pas un auto-spin
+        if (!isAutoSpinning) {
+          spinButton.disabled = true;
+          document.getElementById('spin50Button').disabled = true;
+          document.getElementById('spin100Button').disabled = true;
+        }
+
+        const reels = [reel1, reel2, reel3, reel4, reel5, reel6];
+        reels.forEach(reel => reel.classList.add('spinning'));
+
+        const finalNumbers = [];
+        for (let i = 0; i < 6; i++) {
+          finalNumbers.push(getRandomNumber());
+        }
+
+        setTimeout(() => stopReel(reel1, finalNumbers[0]), 500);
+        setTimeout(() => stopReel(reel2, finalNumbers[1]), 600);
+        setTimeout(() => stopReel(reel3, finalNumbers[2]), 700);
+        setTimeout(() => stopReel(reel4, finalNumbers[3]), 800);
+        setTimeout(() => stopReel(reel5, finalNumbers[4]), 900);
+        setTimeout(() => stopReel(reel6, finalNumbers[5]), 1000);
+
+        setTimeout(() => {
+          isSpinning = false;
           
-          currentHP--;
-          coupCounter++;
-          totalHits++;
-          spinHitsCounter++;
+          // Incrémenter le compteur de spins
           spinsCount++;
           
           // Ajouter 1 rose au jackpot tous les 5 coups
@@ -1336,41 +1366,16 @@
             updateSpinJackpotDisplay();
           }
           
-          updateJackpotBar();
-          
-          if (spinHitsCounter % SPIN_HITS_NEEDED === 0) {
-            jackpotLevel++;
-            showJackpotWin();
-          }
-          
-          isSpinning = true;
-          spinButton.disabled = true;
-
-          const reels = [reel1, reel2, reel3, reel4, reel5, reel6];
-          reels.forEach(reel => reel.classList.add('spinning'));
-
-          const finalNumbers = [];
-          for (let i = 0; i < 6; i++) {
-            finalNumbers.push(getRandomNumber());
-          }
-
-          setTimeout(() => stopReel(reel1, finalNumbers[0]), 500);
-          setTimeout(() => stopReel(reel2, finalNumbers[1]), 600);
-          setTimeout(() => stopReel(reel3, finalNumbers[2]), 700);
-          setTimeout(() => stopReel(reel4, finalNumbers[3]), 800);
-          setTimeout(() => stopReel(reel5, finalNumbers[4]), 900);
-          setTimeout(() => stopReel(reel6, finalNumbers[5]), 1000);
-
-          setTimeout(() => {
-            isSpinning = false;
+          // Ne réactiver les boutons que si ce n'est pas un auto-spin
+          if (!isAutoSpinning) {
             spinButton.disabled = false;
-            checkSpinResult(finalNumbers);
-            updateUI();
-            resolve();
-          }, 1200);
-        } else {
+            document.getElementById('spin50Button').disabled = false;
+            document.getElementById('spin100Button').disabled = false;
+          }
+          
+          checkSpinResult(finalNumbers);
           resolve();
-        }
+        }, 1200);
       });
     }
 
@@ -1417,7 +1422,7 @@
     function updateSpinJackpotDisplay() {
       const spinTitle = document.querySelector('.spin-title');
       if (spinTitle) {
-        spinTitle.textContent = `🔮 Trouve le chiffre mystère - Jackpot: ${spinJackpotRoses} 🌹`;
+        spinTitle.textContent = `🔮 Trouve le code pour découvrir plein de lots de 1k à 10k tirage aléatoire - Jackpot: ${spinJackpotRoses} 🌹`;
       }
     }
 
@@ -1868,13 +1873,17 @@
       updateSpinJackpotDisplay();
     }
 
+    // Écouteurs d'événements
     document.getElementById("attackBtn").addEventListener("click", attack);
     document.getElementById("resetBtn").addEventListener("click", initGame);
     document.getElementById("continueBtn").addEventListener("click", () => {
       bonusContainer.classList.add("hidden");
     });
 
+    // Écouteurs pour les boutons de spin
     spinButton.addEventListener("click", spinReels);
+    spin50Button.addEventListener("click", () => autoSpin(50));
+    spin100Button.addEventListener("click", () => autoSpin(100));
 
     document.getElementById("mode1").addEventListener("click", () => setAttackMode(1));
     document.getElementById("mode10").addEventListener("click", () => setAttackMode(10));
@@ -1952,6 +1961,7 @@
       }
     }, 1000);
 
+    // Initialisation du jeu
     initGame();
   </script>
 </body>
