@@ -675,6 +675,187 @@
       transform: scale(1.05) translateY(-2px);
     }
 
+    .spin-container {
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 15px;
+      border: 2px solid rgba(255, 215, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .spin-title {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #FFD700;
+      font-weight: bold;
+    }
+
+    .spin-reels {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 15px 0;
+    }
+
+    .spin-reel {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+      border: 3px solid #FFD700;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: bold;
+      color: #FFD700;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.4);
+      font-family: 'Courier New', monospace;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), inset 0 2px 5px rgba(255, 255, 255, 0.1);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .spin-reel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+      border-radius: 10px;
+      pointer-events: none;
+    }
+
+    .spin-reel.spinning {
+      animation: reelSpin 0.1s infinite;
+    }
+
+    @keyframes reelSpin {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+    }
+
+    .spin-button {
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      color: #000;
+      font-weight: bold;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .spin-button img {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3));
+    }
+
+    .spin-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+    }
+
+    .spin-button:disabled {
+      background: linear-gradient(45deg, #666, #888);
+      color: #999;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .spin-button:disabled img {
+      opacity: 0.5;
+    }
+
+    .number-0 { border-color: #e74c3c; color: #e74c3c; text-shadow: 0 0 10px rgba(231, 76, 60, 0.8), 0 0 20px rgba(231, 76, 60, 0.4); }
+    .number-1 { border-color: #f39c12; color: #f39c12; text-shadow: 0 0 10px rgba(243, 156, 18, 0.8), 0 0 20px rgba(243, 156, 18, 0.4); }
+    .number-2 { border-color: #27ae60; color: #27ae60; text-shadow: 0 0 10px rgba(39, 174, 96, 0.8), 0 0 20px rgba(39, 174, 96, 0.4); }
+    .number-3 { border-color: #3498db; color: #3498db; text-shadow: 0 0 10px rgba(52, 152, 219, 0.8), 0 0 20px rgba(52, 152, 219, 0.4); }
+    .number-4 { border-color: #9b59b6; color: #9b59b6; text-shadow: 0 0 10px rgba(155, 89, 182, 0.8), 0 0 20px rgba(155, 89, 182, 0.4); }
+    .number-5 { border-color: #e67e22; color: #e67e22; text-shadow: 0 0 10px rgba(230, 126, 34, 0.8), 0 0 20px rgba(230, 126, 34, 0.4); }
+    .number-6 { border-color: #1abc9c; color: #1abc9c; text-shadow: 0 0 10px rgba(26, 188, 156, 0.8), 0 0 20px rgba(26, 188, 156, 0.4); }
+    .number-7 { border-color: #95a5a6; color: #95a5a6; text-shadow: 0 0 10px rgba(149, 165, 166, 0.8), 0 0 20px rgba(149, 165, 166, 0.4); }
+    .number-8 { border-color: #e91e63; color: #e91e63; text-shadow: 0 0 10px rgba(233, 30, 99, 0.8), 0 0 20px rgba(233, 30, 99, 0.4); }
+    .number-9 { border-color: #8e44ad; color: #8e44ad; text-shadow: 0 0 10px rgba(142, 68, 173, 0.8), 0 0 20px rgba(142, 68, 173, 0.4); }
+
+    .number-0.winning { background: linear-gradient(145deg, #c0392b, #e74c3c); color: white; }
+    .number-1.winning { background: linear-gradient(145deg, #e67e22, #f39c12); color: white; }
+    .number-2.winning { background: linear-gradient(145deg, #27ae60, #2ecc71); color: white; }
+    .number-3.winning { background: linear-gradient(145deg, #2980b9, #3498db); color: white; }
+    .number-4.winning { background: linear-gradient(145deg, #8e44ad, #9b59b6); color: white; }
+    .number-5.winning { background: linear-gradient(145deg, #e67e22, #f39c12); color: white; }
+    .number-6.winning { background: linear-gradient(145deg, #16a085, #1abc9c); color: white; }
+    .number-7.winning { background: linear-gradient(145deg, #2c3e50, #34495e); color: white; }
+    .number-8.winning { background: linear-gradient(145deg, #ad1457, #e91e63); color: white; }
+    .number-9.winning { background: linear-gradient(145deg, #7b1fa2, #8e44ad); color: white; }
+
+    .jackpot-bar {
+      margin: 15px 0;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+      padding: 10px;
+      border: 2px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .jackpot-title {
+      font-size: 1.1em;
+      margin-bottom: 8px;
+      color: #FFD700;
+      font-weight: bold;
+    }
+
+    .jackpot-progress {
+      height: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .jackpot-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #FFD700, #FFA500);
+      border-radius: 10px;
+      width: 0%;
+      transition: width 0.5s ease;
+      position: relative;
+    }
+
+    .jackpot-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shine 2s infinite;
+    }
+
+    @keyframes shine {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .jackpot-counter {
+      margin-top: 5px;
+      font-size: 0.9em;
+      color: #FFD700;
+    }
+
     @media (max-width: 480px) {
       .game-container {
         padding: 15px;
@@ -751,6 +932,12 @@
       .reward-image {
         width: 100px;
         height: 100px;
+      }
+
+      .spin-reel {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
       }
     }
 
@@ -831,6 +1018,14 @@
       <p>Un Coup = Un Point de Vie en Moins</p>
     </div>
 
+    <div class="jackpot-bar">
+      <div class="jackpot-title">JACKPOT PROGRESSIF</div>
+      <div class="jackpot-progress">
+        <div class="jackpot-fill" id="jackpotFill"></div>
+      </div>
+      <div class="jackpot-counter" id="jackpotCounter">Prochain jackpot dans: 20 coups</div>
+    </div>
+
     <div class="difficulty-selector">
       <div class="difficulty-btn easy active" data-difficulty="easy">
         <div class="difficulty-btn-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkZIBKVuctd-81US1fPCxkxx5qaA3KNSzRVw&s');"></div>
@@ -849,6 +1044,22 @@
     <div class="hive-container">
       <div class="hive easy" id="hive"></div>
       <div class="particles-container" id="particlesContainer"></div>
+    </div>
+
+    <div class="spin-container">
+      <div class="spin-title">🎰 SPIN DES CHIFFRES 🎰</div>
+      <div class="spin-reels">
+        <div class="spin-reel" id="reel1">0</div>
+        <div class="spin-reel" id="reel2">1</div>
+        <div class="spin-reel" id="reel3">2</div>
+        <div class="spin-reel" id="reel4">3</div>
+        <div class="spin-reel" id="reel5">4</div>
+        <div class="spin-reel" id="reel6">5</div>
+      </div>
+      <button class="spin-button" id="spinButton">
+        <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin">
+        SPIN (1 coup)
+      </button>
     </div>
 
     <div class="attack-modes">
@@ -915,6 +1126,24 @@
     let currentDifficulty = "easy";
     let bonusShown = false;
 
+    let spinHitsCounter = 0;
+    const SPIN_HITS_NEEDED = 20;
+    let jackpotLevel = 0;
+    let isSpinning = false;
+
+    const numberTypes = [
+      { value: 0, name: 'Zéro', colorClass: 'number-0' },
+      { value: 1, name: 'Un', colorClass: 'number-1' },
+      { value: 2, name: 'Deux', colorClass: 'number-2' },
+      { value: 3, name: 'Trois', colorClass: 'number-3' },
+      { value: 4, name: 'Quatre', colorClass: 'number-4' },
+      { value: 5, name: 'Cinq', colorClass: 'number-5' },
+      { value: 6, name: 'Six', colorClass: 'number-6' },
+      { value: 7, name: 'Sept', colorClass: 'number-7' },
+      { value: 8, name: 'Huit', colorClass: 'number-8' },
+      { value: 9, name: 'Neuf', colorClass: 'number-9' }
+    ];
+
     const hive = document.getElementById("hive");
     const message = document.getElementById("message");
     const attackBtn = document.getElementById("attackBtn");
@@ -927,6 +1156,16 @@
     const particlesContainer = document.getElementById("particlesContainer");
     const bonusContainer = document.getElementById("bonusContainer");
     const continueBtn = document.getElementById("continueBtn");
+
+    const spinButton = document.getElementById("spinButton");
+    const reel1 = document.getElementById("reel1");
+    const reel2 = document.getElementById("reel2");
+    const reel3 = document.getElementById("reel3");
+    const reel4 = document.getElementById("reel4");
+    const reel5 = document.getElementById("reel5");
+    const reel6 = document.getElementById("reel6");
+    const jackpotFill = document.getElementById("jackpotFill");
+    const jackpotCounter = document.getElementById("jackpotCounter");
 
     const impactEffects = ["💥", "🔥", "⭐", "💫", "✨", "💢"];
 
@@ -943,6 +1182,139 @@
       hard: "difficile",
       impossible: "impossible"
     };
+
+    function getRandomNumber() {
+      return Math.floor(Math.random() * numberTypes.length);
+    }
+
+    function updateJackpotBar() {
+      const progress = (spinHitsCounter % SPIN_HITS_NEEDED) / SPIN_HITS_NEEDED * 100;
+      jackpotFill.style.width = progress + '%';
+      const hitsLeft = SPIN_HITS_NEEDED - (spinHitsCounter % SPIN_HITS_NEEDED);
+      jackpotCounter.textContent = `Prochain jackpot dans: ${hitsLeft} coup${hitsLeft > 1 ? 's' : ''}`;
+    }
+
+    function updateReelDisplay(reel, numberIndex) {
+      const numberData = numberTypes[numberIndex];
+      
+      numberTypes.forEach(num => {
+        reel.classList.remove(num.colorClass);
+      });
+      
+      reel.classList.add(numberData.colorClass);
+      reel.textContent = numberData.value;
+    }
+
+    function spinReels() {
+      if (isSpinning || currentHP <= 0) return;
+      
+      if (currentHP > 0) {
+        animateHammer();
+        playHitSound();
+        createHitParticles();
+        createImpactEffect();
+        updateCombo();
+        
+        currentHP--;
+        coupCounter++;
+        totalHits++;
+        spinHitsCounter++;
+        
+        updateJackpotBar();
+        
+        if (spinHitsCounter % SPIN_HITS_NEEDED === 0) {
+          jackpotLevel++;
+          showJackpotWin();
+        }
+        
+        isSpinning = true;
+        spinButton.disabled = true;
+
+        const reels = [reel1, reel2, reel3, reel4, reel5, reel6];
+        reels.forEach(reel => reel.classList.add('spinning'));
+
+        const finalNumbers = [];
+        for (let i = 0; i < 6; i++) {
+          finalNumbers.push(getRandomNumber());
+        }
+
+        setTimeout(() => stopReel(reel1, finalNumbers[0]), 500);
+        setTimeout(() => stopReel(reel2, finalNumbers[1]), 600);
+        setTimeout(() => stopReel(reel3, finalNumbers[2]), 700);
+        setTimeout(() => stopReel(reel4, finalNumbers[3]), 800);
+        setTimeout(() => stopReel(reel5, finalNumbers[4]), 900);
+        setTimeout(() => stopReel(reel6, finalNumbers[5]), 1000);
+
+        setTimeout(() => {
+          isSpinning = false;
+          spinButton.disabled = false;
+          checkSpinResult(finalNumbers);
+        }, 1200);
+        
+        updateUI();
+      }
+    }
+
+    function stopReel(reel, numberIndex) {
+      reel.classList.remove('spinning');
+      updateReelDisplay(reel, numberIndex);
+    }
+
+    function checkSpinResult(finalNumbers) {
+      const firstNumber = finalNumbers[0];
+      const allSame = finalNumbers.every(num => num === firstNumber);
+      
+      if (allSame) {
+        const winningNumber = numberTypes[firstNumber];
+        message.textContent = `🎰 JACKPOT! 6x CHIFFRE ${winningNumber.value}! 🎰`;
+        createSound(800, 0.3, 'sine');
+        setTimeout(() => createSound(1000, 0.2, 'sine'), 200);
+        setTimeout(() => createSound(1200, 0.1, 'sine'), 400);
+        
+        const reels = [reel1, reel2, reel3, reel4, reel5, reel6];
+        reels.forEach(reel => {
+          reel.classList.add('winning');
+        });
+        
+        rosesEarnedThisDiamond += 100;
+        showRoseGain(100);
+        
+        setTimeout(() => {
+          reels.forEach(reel => {
+            reel.classList.remove('winning');
+          });
+        }, 2000);
+      } else {
+        const numberCounts = {};
+        finalNumbers.forEach(numberIndex => {
+          const numberValue = numberTypes[numberIndex].value;
+          numberCounts[numberValue] = (numberCounts[numberValue] || 0) + 1;
+        });
+        
+        const maxCount = Math.max(...Object.values(numberCounts));
+        
+        if (maxCount >= 3) {
+          rosesEarnedThisDiamond += maxCount * 5;
+          showRoseGain(maxCount * 5);
+          message.textContent = `🎉 ${maxCount} chiffres identiques ! +${maxCount * 5} points`;
+        }
+      }
+    }
+
+    function showJackpotWin() {
+      const jackpotDisplay = document.createElement('div');
+      jackpotDisplay.className = 'coins-display';
+      jackpotDisplay.textContent = `🎰 JACKPOT NIVEAU ${jackpotLevel}! +50 🪙`;
+      jackpotDisplay.style.background = 'linear-gradient(45deg, #FFD700, #FFA500)';
+      jackpotDisplay.style.fontSize = '16px';
+      hive.parentElement.appendChild(jackpotDisplay);
+
+      rosesEarnedThisDiamond += 50;
+      
+      setTimeout(() => {
+        jackpotDisplay.remove();
+      }, 2000);
+    }
 
     function initAudioContext() {
       try {
@@ -1144,6 +1516,7 @@
         coupCounter++;
         actualHits++;
         totalHits++;
+        spinHitsCounter++;
         currentHP--;
 
         hitsUntilCoin--;
@@ -1152,6 +1525,13 @@
           rosesEarned++;
           hitsUntilCoin = 4;
         }
+      }
+      
+      updateJackpotBar();
+
+      if (spinHitsCounter % SPIN_HITS_NEEDED === 0) {
+        jackpotLevel++;
+        showJackpotWin();
       }
       
       if (rosesEarned > 0) {
@@ -1187,18 +1567,15 @@
     }
 
     function updateUI() {
-      // Vérifier si on a infligé 80% de dégâts (il reste 20% de HP) pour afficher le bonus
       const hpPercentage = (currentHP / maxHP) * 100;
       if (hpPercentage <= 20 && !bonusShown && currentHP > 0) {
         bonusShown = true;
         
-        // Déterminer le montant du bonus selon la difficulté
         let bonusAmount = 1000;
         if (currentDifficulty === 'hard' || currentDifficulty === 'impossible') {
           bonusAmount = 2000;
         }
         
-        // Mettre à jour le texte du bonus
         document.querySelector('#bonusContainer .reward-text').innerHTML = 
           `Vous avez gagné<br><strong style="font-size: 1.8em; color: #ffd700;">${bonusAmount} pièces</strong>`;
         
@@ -1298,19 +1675,16 @@
       
       hive.className = "hive " + difficulty;
       
-      // Masquer les petits modes d'attaque pour les niveaux difficile et impossible
       if (difficulty === 'hard' || difficulty === 'impossible') {
         document.getElementById('mode1').style.display = 'none';
         document.getElementById('mode10').style.display = 'none';
         document.getElementById('mode30').style.display = 'none';
         document.getElementById('mode5000').style.display = 'flex';
         
-        // Si un mode masqué est actif, passer à 100 coups
         if (attackMode === 1 || attackMode === 10 || attackMode === 30) {
           setAttackMode(100);
         }
       } else {
-        // Réafficher tous les petits modes pour les niveaux facile et moyen
         document.getElementById('mode1').style.display = 'flex';
         document.getElementById('mode10').style.display = 'flex';
         document.getElementById('mode30').style.display = 'flex';
@@ -1346,6 +1720,17 @@
       isAttacking = false;
       bonusShown = false;
       
+      spinHitsCounter = 0;
+      jackpotLevel = 0;
+      isSpinning = false;
+      spinButton.disabled = false;
+      
+      const reels = [reel1, reel2, reel3, reel4, reel5, reel6];
+      reels.forEach((reel, index) => {
+        const randomNumber = getRandomNumber();
+        updateReelDisplay(reel, randomNumber);
+      });
+      
       hive.className = "hive " + currentDifficulty;
       message.textContent = `Ruche magique ${difficultyNames[currentDifficulty]} - À tout moment la ruche peut se briser...`;
       
@@ -1356,6 +1741,8 @@
       coupCounter = 0;
       totalHits = 0;
       hitsUntilCoin = 4;
+      
+      updateJackpotBar();
     }
 
     document.getElementById("attackBtn").addEventListener("click", attack);
@@ -1363,6 +1750,8 @@
     document.getElementById("continueBtn").addEventListener("click", () => {
       bonusContainer.classList.add("hidden");
     });
+
+    spinButton.addEventListener("click", spinReels);
 
     document.getElementById("mode1").addEventListener("click", () => setAttackMode(1));
     document.getElementById("mode10").addEventListener("click", () => setAttackMode(10));
@@ -1424,6 +1813,10 @@
         case 'i':
         case 'I':
           setDifficulty('impossible');
+          break;
+        case 's':
+        case 'S':
+          if (!isSpinning) spinReels();
           break;
       }
     });
