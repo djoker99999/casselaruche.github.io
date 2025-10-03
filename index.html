@@ -767,6 +767,14 @@
       50% { transform: scale(1.15); }
     }
 
+    .spin-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
     .spin-button {
       background: linear-gradient(45deg, #FFD700, #FFA500);
       color: #000;
@@ -776,11 +784,30 @@
       border-radius: 25px;
       cursor: pointer;
       transition: all 0.3s ease;
-      margin-top: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
+      min-width: 140px;
+      position: relative;
+    }
+
+    .spin-button .spin-multiplier {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: linear-gradient(45deg, #ff6b9d, #feca57);
+      color: #000;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      border: 2px solid white;
     }
 
     .spin-button img {
@@ -1075,7 +1102,7 @@
     </div>
 
     <div class="spin-container">
-      <div class="spin-title">🎰 SPIN DES CHIFFRES 🎰</div>
+      <div class="spin-title">🔮 Trouve le chiffre mystère 🔮</div>
       <div class="spin-reels">
         <div class="spin-reel" id="reel1">0</div>
         <div class="spin-reel" id="reel2">1</div>
@@ -1084,10 +1111,23 @@
         <div class="spin-reel" id="reel5">4</div>
         <div class="spin-reel" id="reel6">5</div>
       </div>
-      <button class="spin-button" id="spinButton">
-        <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin">
-        SPIN (1 coup)
-      </button>
+      <div class="spin-buttons">
+        <button class="spin-button" id="spinButton">
+          <div class="spin-multiplier">x1</div>
+          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin">
+          SPIN (1 coup)
+        </button>
+        <button class="spin-button" id="spin50Button">
+          <div class="spin-multiplier">x50</div>
+          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 50">
+          50 SPINS
+        </button>
+        <button class="spin-button" id="spin100Button">
+          <div class="spin-multiplier">x100</div>
+          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 100">
+          100 SPINS
+        </button>
+      </div>
     </div>
 
     <div class="attack-modes">
@@ -1160,6 +1200,8 @@
     let isSpinning = false;
     let spinJackpotRoses = 1000;
     let spinsCount = 0;
+    let autoSpinCount = 0;
+    let isAutoSpinning = false;
 
     const numberTypes = [
       { value: 0, name: 'Zéro', colorClass: 'number-0' },
@@ -1235,61 +1277,101 @@
       reel.textContent = numberData.value;
     }
 
-    function spinReels() {
-      if (isSpinning || currentHP <= 0) return;
+    async function autoSpin(count) {
+      if (isAutoSpinning || currentHP <= 0) return;
       
-      if (currentHP > 0) {
-        animateHammer();
-        playHitSound();
-        createHitParticles();
-        createImpactEffect();
-        updateCombo();
+      isAutoSpinning = true;
+      autoSpinCount = count;
+      
+      // Désactiver tous les boutons de spin
+      spinButton.disabled = true;
+      document.getElementById('spin50Button').disabled = true;
+      document.getElementById('spin100Button').disabled = true;
+      
+      for (let i = 0; i < count; i++) {
+        if (currentHP <= 0) break;
         
-        currentHP--;
-        coupCounter++;
-        totalHits++;
-        spinHitsCounter++;
-        spinsCount++;
+        await spinReels();
         
-        // Ajouter 1 rose au jackpot tous les 5 coups
-        if (spinsCount % 5 === 0) {
-          spinJackpotRoses++;
-          updateSpinJackpotDisplay();
-        }
+        // Petite pause entre chaque spin
+        await new Promise(resolve => setTimeout(resolve, 100));
         
-        updateJackpotBar();
-        
-        if (spinHitsCounter % SPIN_HITS_NEEDED === 0) {
-          jackpotLevel++;
-          showJackpotWin();
-        }
-        
-        isSpinning = true;
-        spinButton.disabled = true;
-
-        const reels = [reel1, reel2, reel3, reel4, reel5, reel6];
-        reels.forEach(reel => reel.classList.add('spinning'));
-
-        const finalNumbers = [];
-        for (let i = 0; i < 6; i++) {
-          finalNumbers.push(getRandomNumber());
-        }
-
-        setTimeout(() => stopReel(reel1, finalNumbers[0]), 500);
-        setTimeout(() => stopReel(reel2, finalNumbers[1]), 600);
-        setTimeout(() => stopReel(reel3, finalNumbers[2]), 700);
-        setTimeout(() => stopReel(reel4, finalNumbers[3]), 800);
-        setTimeout(() => stopReel(reel5, finalNumbers[4]), 900);
-        setTimeout(() => stopReel(reel6, finalNumbers[5]), 1000);
-
-        setTimeout(() => {
-          isSpinning = false;
-          spinButton.disabled = false;
-          checkSpinResult(finalNumbers);
-        }, 1200);
-        
-        updateUI();
+        autoSpinCount--;
       }
+      
+      isAutoSpinning = false;
+      autoSpinCount = 0;
+      
+      // Réactiver les boutons
+      if (currentHP > 0) {
+        spinButton.disabled = false;
+        document.getElementById('spin50Button').disabled = false;
+        document.getElementById('spin100Button').disabled = false;
+      }
+    }
+
+    function spinReels() {
+      return new Promise((resolve) => {
+        if (isSpinning || currentHP <= 0) {
+          resolve();
+          return;
+        }
+        
+        if (currentHP > 0) {
+          animateHammer();
+          playHitSound();
+          createHitParticles();
+          createImpactEffect();
+          updateCombo();
+          
+          currentHP--;
+          coupCounter++;
+          totalHits++;
+          spinHitsCounter++;
+          spinsCount++;
+          
+          // Ajouter 1 rose au jackpot tous les 5 coups
+          if (spinsCount % 5 === 0) {
+            spinJackpotRoses++;
+            updateSpinJackpotDisplay();
+          }
+          
+          updateJackpotBar();
+          
+          if (spinHitsCounter % SPIN_HITS_NEEDED === 0) {
+            jackpotLevel++;
+            showJackpotWin();
+          }
+          
+          isSpinning = true;
+          spinButton.disabled = true;
+
+          const reels = [reel1, reel2, reel3, reel4, reel5, reel6];
+          reels.forEach(reel => reel.classList.add('spinning'));
+
+          const finalNumbers = [];
+          for (let i = 0; i < 6; i++) {
+            finalNumbers.push(getRandomNumber());
+          }
+
+          setTimeout(() => stopReel(reel1, finalNumbers[0]), 500);
+          setTimeout(() => stopReel(reel2, finalNumbers[1]), 600);
+          setTimeout(() => stopReel(reel3, finalNumbers[2]), 700);
+          setTimeout(() => stopReel(reel4, finalNumbers[3]), 800);
+          setTimeout(() => stopReel(reel5, finalNumbers[4]), 900);
+          setTimeout(() => stopReel(reel6, finalNumbers[5]), 1000);
+
+          setTimeout(() => {
+            isSpinning = false;
+            spinButton.disabled = false;
+            checkSpinResult(finalNumbers);
+            updateUI();
+            resolve();
+          }, 1200);
+        } else {
+          resolve();
+        }
+      });
     }
 
     function stopReel(reel, numberIndex) {
@@ -1298,12 +1380,13 @@
     }
 
     function checkSpinResult(finalNumbers) {
-      // Vérifier si les 6 chiffres sont tous des 7
-      const allSevens = finalNumbers.every(num => num === 7);
+      // Vérifier si les 6 chiffres forment la séquence gagnante : 2-5-0-4-8-4
+      const winningSequence = [2, 5, 0, 4, 8, 4];
+      const isJackpot = finalNumbers.every((num, index) => num === winningSequence[index]);
       
-      if (allSevens) {
-        // JACKPOT ! Tous les chiffres sont des 7
-        message.textContent = `🎰 JACKPOT! 6x CHIFFRE 7! Tu gagnes ${spinJackpotRoses} roses! 🎰`;
+      if (isJackpot) {
+        // JACKPOT ! La séquence 250484 est complète
+        message.textContent = `🎰 JACKPOT! 250484! Tu gagnes ${spinJackpotRoses} roses! 🎰`;
         createSound(800, 0.3, 'sine');
         setTimeout(() => createSound(1000, 0.2, 'sine'), 200);
         setTimeout(() => createSound(1200, 0.1, 'sine'), 400);
@@ -1318,8 +1401,8 @@
         rosesEarnedThisDiamond += spinJackpotRoses;
         showRoseGain(spinJackpotRoses);
         
-        // Réinitialiser le jackpot
-        spinJackpotRoses = 0;
+        // Réinitialiser le jackpot à 1000
+        spinJackpotRoses = 1000;
         updateSpinJackpotDisplay();
         
         // Réinitialiser l'animation après 2 secondes
@@ -1334,7 +1417,7 @@
     function updateSpinJackpotDisplay() {
       const spinTitle = document.querySelector('.spin-title');
       if (spinTitle) {
-        spinTitle.textContent = `🎰 SPIN DES CHIFFRES - Jackpot: ${spinJackpotRoses} 🌹`;
+        spinTitle.textContent = `🔮 Trouve le chiffre mystère - Jackpot: ${spinJackpotRoses} 🌹`;
       }
     }
 
