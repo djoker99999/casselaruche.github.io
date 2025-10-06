@@ -1138,6 +1138,11 @@
         <div class="spin-reel" id="reel6">5</div>
       </div>
       <div class="spin-buttons">
+        <button class="spin-button" id="spin1Button">
+          <div class="spin-multiplier">x1</div>
+          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 1">
+          1 SPIN
+        </button>
         <button class="spin-button" id="spin5Button">
           <div class="spin-multiplier">x5</div>
           <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 5">
@@ -1266,6 +1271,7 @@
     const bonusContainer = document.getElementById("bonusContainer");
     const continueBtn = document.getElementById("continueBtn");
 
+    const spin1Button = document.getElementById("spin1Button");
     const spin5Button = document.getElementById("spin5Button");
     const spin30Button = document.getElementById("spin30Button");
     const spin50Button = document.getElementById("spin50Button");
@@ -1396,6 +1402,7 @@
       autoSpinCount = count;
       
       // Désactiver tous les boutons de spin
+      spin1Button.disabled = true;
       spin5Button.disabled = true;
       spin30Button.disabled = true;
       spin50Button.disabled = true;
@@ -1418,6 +1425,7 @@
       autoSpinCount = 0;
       
       // Réactiver les boutons
+      spin1Button.disabled = false;
       spin5Button.disabled = false;
       spin30Button.disabled = false;
       spin50Button.disabled = false;
@@ -1441,6 +1449,7 @@
         
         // Ne désactiver les boutons que si ce n'est pas un auto-spin
         if (!isAutoSpinning) {
+          spin1Button.disabled = true;
           spin5Button.disabled = true;
           spin30Button.disabled = true;
           spin50Button.disabled = true;
@@ -1476,6 +1485,7 @@
           
           // Ne réactiver les boutons que si ce n'est pas un auto-spin
           if (!isAutoSpinning) {
+            spin1Button.disabled = false;
             spin5Button.disabled = false;
             spin30Button.disabled = false;
             spin50Button.disabled = false;
@@ -1976,6 +1986,7 @@
       }
       
       // Réactiver les boutons de spin
+      spin1Button.disabled = false;
       spin5Button.disabled = false;
       spin30Button.disabled = false;
       spin50Button.disabled = false;
@@ -2009,6 +2020,7 @@
     });
 
     // Écouteurs pour les boutons de spin
+    spin1Button.addEventListener("click", () => autoSpin(1));
     spin5Button.addEventListener("click", () => autoSpin(5));
     spin30Button.addEventListener("click", () => autoSpin(30));
     spin50Button.addEventListener("click", () => autoSpin(50));
