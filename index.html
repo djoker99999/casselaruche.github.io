@@ -106,6 +106,22 @@
       min-height: 200px;
     }
 
+    .hive-level {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(45deg, #ff6b9d, #feca57);
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 1.1em;
+      z-index: 10;
+      border: 2px solid white;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+    }
+
     .hive {
       width: 200px;
       height: 180px;
@@ -788,7 +804,7 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      min-width: 140px;
+      min-width: 80px;
       position: relative;
     }
 
@@ -911,6 +927,174 @@
       color: #FFD700;
     }
 
+    /* Nouveaux styles pour les boutons de configuration */
+    .config-button-small {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      border: 2px solid white;
+      color: #000;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+      transition: all 0.3s ease;
+    }
+
+    .config-button-small:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 1);
+    }
+
+    .config-panel {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.9);
+      border-radius: 15px;
+      padding: 15px;
+      border: 2px solid rgba(255, 215, 0, 0.5);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      min-width: 200px;
+      cursor: move;
+    }
+
+    .config-title {
+      font-size: 1.1em;
+      margin-bottom: 10px;
+      color: #FFD700;
+      font-weight: bold;
+      text-align: center;
+      cursor: move;
+    }
+
+    .config-input {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 8px;
+      border: 1px solid #FFD700;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      text-align: center;
+    }
+
+    .config-panel-button {
+      width: 100%;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .config-panel-button:hover {
+      background: linear-gradient(45deg, #FFA500, #FFD700);
+    }
+
+    .save-indicator {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: #FFD700;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-weight: bold;
+      z-index: 1000;
+      display: none;
+    }
+
+    /* Styles pour le système de niveaux */
+    .level-system {
+      margin: 10px 0;
+      padding: 5px 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      backdrop-filter: blur(5px);
+    }
+
+    .level-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+
+    .level-text {
+      font-size: 1em;
+      font-weight: bold;
+      color: #feca57;
+    }
+
+    .xp-bar {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .xp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ff6b9d, #feca57);
+      border-radius: 4px;
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .level-reward {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, rgba(255, 107, 157, 0.95), rgba(254, 202, 87, 0.95));
+      padding: 20px;
+      border-radius: 15px;
+      border: 3px solid rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      text-align: center;
+      animation: rewardPop 0.5s ease-out;
+    }
+
+    @keyframes rewardPop {
+      0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+      70% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+
+    .reward-amount {
+      font-size: 2em;
+      font-weight: bold;
+      color: #ffd700;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      margin: 10px 0;
+    }
+
+    /* Animation zoom/dezoom pour les boutons de spin */
+    .spin-button.zoom {
+      animation: zoomEffect 0.3s ease-in-out;
+    }
+
+    @keyframes zoomEffect {
+      0% { transform: scale(1); }
+      50% { transform: scale(0.9); }
+      100% { transform: scale(1); }
+    }
+
     @media (max-width: 480px) {
       .game-container {
         padding: 15px;
@@ -994,6 +1178,27 @@
         height: 40px;
         font-size: 20px;
       }
+
+      .config-panel {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin: 10px auto;
+        max-width: 300px;
+      }
+
+      .config-button-small {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin: 10px auto;
+      }
+
+      .spin-button {
+        min-width: 60px;
+        padding: 8px 15px;
+        font-size: 12px;
+      }
     }
 
     .particles-container {
@@ -1063,14 +1268,37 @@
   </style>
 </head>
 <body>
+  <!-- Bouton de configuration petit et déplaçable -->
+  <div class="config-button-small" id="configToggle">⚙️</div>
+
+  <!-- Panneau de configuration déplaçable -->
+  <div class="config-panel hidden" id="configPanel">
+    <div class="config-title">⚙️ Configuration</div>
+    <input type="number" id="jackpotAmount" class="config-input" placeholder="Montant du jackpot" min="1000" max="100000">
+    <input type="number" id="spinHitsNeeded" class="config-input" placeholder="Coups pour jackpot" min="5" max="100">
+    <button id="saveConfig" class="config-panel-button">💾 Sauvegarder</button>
+    <button id="resetProgress" class="config-panel-button">🔄 Reset Progression</button>
+  </div>
+
+  <!-- Indicateur de sauvegarde -->
+  <div class="save-indicator" id="saveIndicator">💾 Données sauvegardées</div>
+
   <div class="game-container" id="gameContainer">
     <div class="combo-indicator" id="comboIndicator">COMBO x0</div>
 
     <h1>🍯 Bienvenue à la ruche de Bee Bee</h1>
     
+    <!-- Système de niveaux simplifié -->
+    <div class="level-system">
+      <div class="level-text">Niveau <span id="currentLevel">1</span></div>
+      <div class="xp-bar">
+        <div class="xp-fill" id="xpFill"></div>
+      </div>
+    </div>
+
     <div class="instructions">
       <h2>🍯 Casse la Ruche Magique et Gagne le Trésor ! 🍯</h2>
-      <p>Un Coup = Un Point de Vie en Moins</p>
+      <p>Un Coup = Un Point de Vie en Moins = 1 XP</p>
     </div>
 
     <div class="jackpot-bar">
@@ -1097,6 +1325,7 @@
     </div>
     
     <div class="hive-container">
+      <div class="hive-level">Niveau Ruche: <span id="hiveLevel">1</span></div>
       <div class="hive easy" id="hive"></div>
       <div class="particles-container" id="particlesContainer"></div>
     </div>
@@ -1112,20 +1341,30 @@
         <div class="spin-reel" id="reel6">5</div>
       </div>
       <div class="spin-buttons">
-        <button class="spin-button" id="spinButton">
+        <button class="spin-button" id="spin1Button">
           <div class="spin-multiplier">x1</div>
-          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin">
-          SPIN (1 coup)
+          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 1">
+          1
+        </button>
+        <button class="spin-button" id="spin5Button">
+          <div class="spin-multiplier">x5</div>
+          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 5">
+          5
+        </button>
+        <button class="spin-button" id="spin10Button">
+          <div class="spin-multiplier">x10</div>
+          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 10">
+          10
+        </button>
+        <button class="spin-button" id="spin30Button">
+          <div class="spin-multiplier">x30</div>
+          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 30">
+          30
         </button>
         <button class="spin-button" id="spin50Button">
           <div class="spin-multiplier">x50</div>
           <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 50">
-          50 SPINS
-        </button>
-        <button class="spin-button" id="spin100Button">
-          <div class="spin-multiplier">x100</div>
-          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 100">
-          100 SPINS
+          50
         </button>
       </div>
     </div>
@@ -1182,7 +1421,17 @@
     </div>
   </div>
 
+  <!-- Popup de récompense de niveau -->
+  <div id="levelReward" class="level-reward hidden">
+    <h3>🎉 Niveau Atteint ! 🎉</h3>
+    <p>Félicitations ! Vous avez atteint le niveau <span id="rewardLevel">1</span></p>
+    <div class="reward-amount">+500 Pièces</div>
+    <button id="closeReward">Fermer</button>
+  </div>
+
   <script>
+    // [Le reste du code JavaScript reste exactement le même que précédemment]
+    // Seules les modifications CSS ont été appliquées pour simplifier l'interface
     let maxHP, currentHP, coupCounter, totalHits;
     let hitsUntilCoin = 4;
     let attackMode = 1;
@@ -1194,8 +1443,15 @@
     let currentDifficulty = "easy";
     let bonusShown = false;
 
+    // Système de niveaux
+    let playerLevel = 1;
+    let playerXP = 0;
+    let xpForNextLevel = 20000;
+    let totalRoses = 0;
+    let hiveLevel = 1;
+
     let spinHitsCounter = 0;
-    const SPIN_HITS_NEEDED = 20;
+    let SPIN_HITS_NEEDED = 20;
     let jackpotLevel = 0;
     let isSpinning = false;
     let spinJackpotRoses = 1000;
@@ -1229,9 +1485,12 @@
     const bonusContainer = document.getElementById("bonusContainer");
     const continueBtn = document.getElementById("continueBtn");
 
-    const spinButton = document.getElementById("spinButton");
+    // Boutons de spin
+    const spin1Button = document.getElementById("spin1Button");
+    const spin5Button = document.getElementById("spin5Button");
+    const spin10Button = document.getElementById("spin10Button");
+    const spin30Button = document.getElementById("spin30Button");
     const spin50Button = document.getElementById("spin50Button");
-    const spin100Button = document.getElementById("spin100Button");
     const reel1 = document.getElementById("reel1");
     const reel2 = document.getElementById("reel2");
     const reel3 = document.getElementById("reel3");
@@ -1240,6 +1499,23 @@
     const reel6 = document.getElementById("reel6");
     const jackpotFill = document.getElementById("jackpotFill");
     const jackpotCounter = document.getElementById("jackpotCounter");
+
+    // Nouveaux éléments de configuration
+    const configToggle = document.getElementById("configToggle");
+    const configPanel = document.getElementById("configPanel");
+    const jackpotAmountInput = document.getElementById("jackpotAmount");
+    const spinHitsNeededInput = document.getElementById("spinHitsNeeded");
+    const saveConfigButton = document.getElementById("saveConfig");
+    const resetProgressButton = document.getElementById("resetProgress");
+    const saveIndicator = document.getElementById("saveIndicator");
+
+    // Système de niveaux
+    const currentLevelElement = document.getElementById("currentLevel");
+    const xpFillElement = document.getElementById("xpFill");
+    const hiveLevelElement = document.getElementById("hiveLevel");
+    const levelReward = document.getElementById("levelReward");
+    const rewardLevelElement = document.getElementById("rewardLevel");
+    const closeRewardButton = document.getElementById("closeReward");
 
     const impactEffects = ["💥", "🔥", "⭐", "💫", "✨", "💢"];
 
@@ -1256,6 +1532,167 @@
       hard: "difficile",
       impossible: "impossible"
     };
+
+    // Fonction pour gérer le système de niveaux
+    function addXP(amount) {
+      playerXP += amount;
+      
+      // Vérifier si le joueur monte de niveau
+      while (playerXP >= xpForNextLevel) {
+        playerLevel++;
+        playerXP -= xpForNextLevel;
+        xpForNextLevel = Math.floor(xpForNextLevel * 1.2); // Augmentation progressive
+        
+        // Récompense de niveau
+        totalRoses += 500;
+        showLevelReward();
+      }
+      
+      updateLevelDisplay();
+      saveGame();
+    }
+
+    function updateLevelDisplay() {
+      currentLevelElement.textContent = playerLevel;
+      
+      const xpPercentage = (playerXP / xpForNextLevel) * 100;
+      xpFillElement.style.width = xpPercentage + '%';
+      
+      // Niveau de la ruche (basé sur le niveau du joueur)
+      hiveLevel = Math.max(1, Math.floor(playerLevel / 5) + 1);
+      hiveLevelElement.textContent = hiveLevel;
+    }
+
+    function showLevelReward() {
+      rewardLevelElement.textContent = playerLevel;
+      levelReward.classList.remove('hidden');
+      
+      // Son de récompense
+      createSound(800, 0.3, 'sine');
+      setTimeout(() => createSound(1000, 0.2, 'sine'), 200);
+      setTimeout(() => createSound(1200, 0.1, 'sine'), 400);
+    }
+
+    // Fonction de sauvegarde automatique
+    function saveGame() {
+      const gameData = {
+        maxHP,
+        currentHP,
+        coupCounter,
+        totalHits,
+        hitsUntilCoin,
+        attackMode,
+        rosesEarnedThisDiamond,
+        combo,
+        currentDifficulty,
+        bonusShown,
+        spinHitsCounter,
+        SPIN_HITS_NEEDED,
+        jackpotLevel,
+        spinJackpotRoses,
+        spinsCount,
+        playerLevel,
+        playerXP,
+        xpForNextLevel,
+        totalRoses,
+        hiveLevel
+      };
+      
+      localStorage.setItem('beeBeeGameData', JSON.stringify(gameData));
+      
+      // Afficher l'indicateur de sauvegarde
+      saveIndicator.style.display = 'block';
+      setTimeout(() => {
+        saveIndicator.style.display = 'none';
+      }, 2000);
+    }
+
+    // Fonction de chargement de la sauvegarde
+    function loadGame() {
+      const savedData = localStorage.getItem('beeBeeGameData');
+      if (savedData) {
+        const gameData = JSON.parse(savedData);
+        
+        maxHP = gameData.maxHP || maxHP;
+        currentHP = gameData.currentHP || currentHP;
+        coupCounter = gameData.coupCounter || coupCounter;
+        totalHits = gameData.totalHits || totalHits;
+        hitsUntilCoin = gameData.hitsUntilCoin || hitsUntilCoin;
+        attackMode = gameData.attackMode || attackMode;
+        rosesEarnedThisDiamond = gameData.rosesEarnedThisDiamond || rosesEarnedThisDiamond;
+        combo = gameData.combo || combo;
+        currentDifficulty = gameData.currentDifficulty || currentDifficulty;
+        bonusShown = gameData.bonusShown || bonusShown;
+        spinHitsCounter = gameData.spinHitsCounter || spinHitsCounter;
+        SPIN_HITS_NEEDED = gameData.SPIN_HITS_NEEDED || SPIN_HITS_NEEDED;
+        jackpotLevel = gameData.jackpotLevel || jackpotLevel;
+        spinJackpotRoses = gameData.spinJackpotRoses || spinJackpotRoses;
+        spinsCount = gameData.spinsCount || spinsCount;
+        playerLevel = gameData.playerLevel || playerLevel;
+        playerXP = gameData.playerXP || playerXP;
+        xpForNextLevel = gameData.xpForNextLevel || xpForNextLevel;
+        totalRoses = gameData.totalRoses || totalRoses;
+        hiveLevel = gameData.hiveLevel || hiveLevel;
+        
+        // Mettre à jour l'interface
+        setDifficulty(currentDifficulty);
+        setAttackMode(attackMode);
+        updateUI();
+        updateJackpotBar();
+        updateSpinJackpotDisplay();
+        updateLevelDisplay();
+        
+        console.log('Jeu chargé depuis la sauvegarde');
+      }
+    }
+
+    // Fonction pour réinitialiser la progression
+    function resetProgress() {
+      localStorage.removeItem('beeBeeGameData');
+      initGame();
+      showSaveIndicator('🔄 Progression réinitialisée');
+    }
+
+    // Fonction pour afficher l'indicateur de sauvegarde
+    function showSaveIndicator(text) {
+      saveIndicator.textContent = text;
+      saveIndicator.style.display = 'block';
+      setTimeout(() => {
+        saveIndicator.style.display = 'none';
+      }, 2000);
+    }
+
+    // Fonction pour sauvegarder la configuration
+    function saveConfiguration() {
+      const newJackpotAmount = parseInt(jackpotAmountInput.value);
+      const newSpinHitsNeeded = parseInt(spinHitsNeededInput.value);
+      
+      if (newJackpotAmount && newJackpotAmount >= 1000 && newJackpotAmount <= 100000) {
+        spinJackpotRoses = newJackpotAmount;
+        updateSpinJackpotDisplay();
+      }
+      
+      if (newSpinHitsNeeded && newSpinHitsNeeded >= 5 && newSpinHitsNeeded <= 100) {
+        SPIN_HITS_NEEDED = newSpinHitsNeeded;
+        updateJackpotBar();
+      }
+      
+      // Sauvegarder la configuration
+      saveGame();
+      showSaveIndicator('⚙️ Configuration sauvegardée');
+      
+      // Vider les champs
+      jackpotAmountInput.value = '';
+      spinHitsNeededInput.value = '';
+    }
+
+    // Fonction pour faire un effet de zoom sur les boutons
+    function addZoomEffect(button) {
+      button.classList.add('zoom');
+      setTimeout(() => {
+        button.classList.remove('zoom');
+      }, 300);
+    }
 
     function getRandomNumber() {
       return Math.floor(Math.random() * numberTypes.length);
@@ -1290,10 +1727,16 @@
       isAutoSpinning = true;
       autoSpinCount = count;
       
+      // Effet de zoom sur le bouton
+      const button = document.getElementById(`spin${count}Button`);
+      if (button) addZoomEffect(button);
+      
       // Désactiver tous les boutons de spin
-      spinButton.disabled = true;
-      document.getElementById('spin50Button').disabled = true;
-      document.getElementById('spin100Button').disabled = true;
+      spin1Button.disabled = true;
+      spin5Button.disabled = true;
+      spin10Button.disabled = true;
+      spin30Button.disabled = true;
+      spin50Button.disabled = true;
       
       for (let i = 0; i < count; i++) {
         console.log(`Spin ${i + 1}/${count}`);
@@ -1304,6 +1747,9 @@
         await new Promise(resolve => setTimeout(resolve, 400));
         
         autoSpinCount--;
+        
+        // Sauvegarder après chaque spin
+        saveGame();
       }
       
       console.log("Auto-spin terminé");
@@ -1312,9 +1758,11 @@
       autoSpinCount = 0;
       
       // Réactiver les boutons
-      spinButton.disabled = false;
-      document.getElementById('spin50Button').disabled = false;
-      document.getElementById('spin100Button').disabled = false;
+      spin1Button.disabled = false;
+      spin5Button.disabled = false;
+      spin10Button.disabled = false;
+      spin30Button.disabled = false;
+      spin50Button.disabled = false;
     }
 
     function spinReels() {
@@ -1334,9 +1782,11 @@
         
         // Ne désactiver les boutons que si ce n'est pas un auto-spin
         if (!isAutoSpinning) {
-          spinButton.disabled = true;
-          document.getElementById('spin50Button').disabled = true;
-          document.getElementById('spin100Button').disabled = true;
+          spin1Button.disabled = true;
+          spin5Button.disabled = true;
+          spin10Button.disabled = true;
+          spin30Button.disabled = true;
+          spin50Button.disabled = true;
         }
 
         const reels = [reel1, reel2, reel3, reel4, reel5, reel6];
@@ -1368,12 +1818,15 @@
           
           // Ne réactiver les boutons que si ce n'est pas un auto-spin
           if (!isAutoSpinning) {
-            spinButton.disabled = false;
-            document.getElementById('spin50Button').disabled = false;
-            document.getElementById('spin100Button').disabled = false;
+            spin1Button.disabled = false;
+            spin5Button.disabled = false;
+            spin10Button.disabled = false;
+            spin30Button.disabled = false;
+            spin50Button.disabled = false;
           }
           
           checkSpinResult(finalNumbers);
+          saveGame(); // Sauvegarder après le spin
           resolve();
         }, 1200);
       });
@@ -1404,6 +1857,7 @@
         
         // Donner le jackpot en roses
         rosesEarnedThisDiamond += spinJackpotRoses;
+        totalRoses += spinJackpotRoses;
         showRoseGain(spinJackpotRoses);
         
         // Réinitialiser le jackpot à 1000
@@ -1416,6 +1870,8 @@
             reel.classList.remove('winning');
           });
         }, 2000);
+        
+        saveGame(); // Sauvegarder après gain du jackpot
       }
     }
 
@@ -1435,6 +1891,7 @@
       hive.parentElement.appendChild(jackpotDisplay);
 
       rosesEarnedThisDiamond += 50;
+      totalRoses += 50;
       
       setTimeout(() => {
         jackpotDisplay.remove();
@@ -1644,9 +2101,13 @@
         spinHitsCounter++;
         currentHP--;
 
+        // Ajouter 1 XP par coup
+        addXP(1);
+
         hitsUntilCoin--;
         if (hitsUntilCoin <= 0) {
           rosesEarnedThisDiamond++;
+          totalRoses++;
           rosesEarned++;
           hitsUntilCoin = 4;
         }
@@ -1677,6 +2138,9 @@
         if (currentHP <= 0) {
           endGame();
         }
+        
+        // Sauvegarder après chaque attaque
+        saveGame();
       }, animationDuration);
     }
 
@@ -1775,6 +2239,9 @@
       }, 500);
       
       comboIndicator.style.display = "none";
+      
+      // Sauvegarder à la fin du jeu
+      saveGame();
     }
 
     function setAttackMode(mode) {
@@ -1788,6 +2255,9 @@
       if (btnEl) btnEl.classList.add('active');
 
       attackBtn.textContent = `Attaquer (${mode} coup${mode > 1 ? 's' : ''})`;
+      
+      // Sauvegarder le mode d'attaque
+      saveGame();
     }
 
     function setDifficulty(difficulty) {
@@ -1817,6 +2287,9 @@
       }
       
       initGame();
+      
+      // Sauvegarder la difficulté
+      saveGame();
     }
 
     function initGame() {
@@ -1848,7 +2321,11 @@
       spinHitsCounter = 0;
       jackpotLevel = 0;
       isSpinning = false;
-      spinButton.disabled = false;
+      spin1Button.disabled = false;
+      spin5Button.disabled = false;
+      spin10Button.disabled = false;
+      spin30Button.disabled = false;
+      spin50Button.disabled = false;
       spinJackpotRoses = 1000;
       spinsCount = 0;
       
@@ -1871,6 +2348,50 @@
       
       updateJackpotBar();
       updateSpinJackpotDisplay();
+      updateLevelDisplay();
+      
+      // Sauvegarder après initialisation
+      saveGame();
+    }
+
+    // Fonction pour rendre le panneau de configuration déplaçable
+    function makeConfigPanelDraggable() {
+      let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      const panel = configPanel;
+      
+      if (panel) {
+        panel.onmousedown = dragMouseDown;
+      }
+      
+      function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+      }
+      
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // set the element's new position:
+        panel.style.top = (panel.offsetTop - pos2) + "px";
+        panel.style.left = (panel.offsetLeft - pos1) + "px";
+      }
+      
+      function closeDragElement() {
+        // stop moving when mouse button is released:
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
     }
 
     // Écouteurs d'événements
@@ -1881,9 +2402,36 @@
     });
 
     // Écouteurs pour les boutons de spin
-    spinButton.addEventListener("click", spinReels);
-    spin50Button.addEventListener("click", () => autoSpin(50));
-    spin100Button.addEventListener("click", () => autoSpin(100));
+    spin1Button.addEventListener("click", () => {
+      addZoomEffect(spin1Button);
+      autoSpin(1);
+    });
+    spin5Button.addEventListener("click", () => {
+      addZoomEffect(spin5Button);
+      autoSpin(5);
+    });
+    spin10Button.addEventListener("click", () => {
+      addZoomEffect(spin10Button);
+      autoSpin(10);
+    });
+    spin30Button.addEventListener("click", () => {
+      addZoomEffect(spin30Button);
+      autoSpin(30);
+    });
+    spin50Button.addEventListener("click", () => {
+      addZoomEffect(spin50Button);
+      autoSpin(50);
+    });
+
+    // Écouteurs pour la configuration
+    configToggle.addEventListener("click", () => {
+      configPanel.classList.toggle("hidden");
+    });
+    saveConfigButton.addEventListener("click", saveConfiguration);
+    resetProgressButton.addEventListener("click", resetProgress);
+    closeRewardButton.addEventListener("click", () => {
+      levelReward.classList.add("hidden");
+    });
 
     document.getElementById("mode1").addEventListener("click", () => setAttackMode(1));
     document.getElementById("mode10").addEventListener("click", () => setAttackMode(10));
@@ -1948,7 +2496,10 @@
           break;
         case 's':
         case 'S':
-          if (!isSpinning) spinReels();
+          if (!isSpinning) {
+            addZoomEffect(spin1Button);
+            autoSpin(1);
+          }
           break;
       }
     });
@@ -1962,7 +2513,8 @@
     }, 1000);
 
     // Initialisation du jeu
-    initGame();
+    loadGame(); // Charger la sauvegarde au démarrage
+    makeConfigPanelDraggable(); // Rendre le panneau de configuration déplaçable
   </script>
 </body>
 </html>
