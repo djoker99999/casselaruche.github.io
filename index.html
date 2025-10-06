@@ -397,39 +397,18 @@
       justify-content: center;
       padding: 10px;
       position: relative;
-      animation: floatEffect 3s ease-in-out infinite;
-    }
-
-    .attack-mode-image:nth-child(1) { animation-delay: 0s; }
-    .attack-mode-image:nth-child(2) { animation-delay: 0.2s; }
-    .attack-mode-image:nth-child(3) { animation-delay: 0.4s; }
-    .attack-mode-image:nth-child(4) { animation-delay: 0.6s; }
-    .attack-mode-image:nth-child(5) { animation-delay: 0.8s; }
-    .attack-mode-image:nth-child(6) { animation-delay: 1s; }
-    .attack-mode-image:nth-child(7) { animation-delay: 1.2s; }
-
-    @keyframes floatEffect {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-8px) scale(1.05); }
     }
 
     .attack-mode-image:hover {
       background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-3px) scale(1.08);
-      animation-play-state: paused;
+      transform: translateY(-3px);
     }
 
     .attack-mode-image.active {
       border-color: #fff;
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
       background: rgba(255, 255, 255, 0.3);
-      transform: scale(1.08);
-      animation: activePulse 1.5s ease-in-out infinite;
-    }
-
-    @keyframes activePulse {
-      0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.7); }
-      50% { box-shadow: 0 0 30px rgba(255, 255, 255, 0.9); }
+      transform: scale(1.05);
     }
 
     .attack-mode-image img {
@@ -437,11 +416,6 @@
       height: 65px;
       object-fit: contain;
       filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
-      transition: transform 0.3s ease;
-    }
-
-    .attack-mode-image:hover img {
-      transform: scale(1.1);
     }
 
     .attack-mode-label {
@@ -1138,20 +1112,10 @@
         <div class="spin-reel" id="reel6">5</div>
       </div>
       <div class="spin-buttons">
-        <button class="spin-button" id="spin1Button">
+        <button class="spin-button" id="spinButton">
           <div class="spin-multiplier">x1</div>
-          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 1">
-          1 SPIN
-        </button>
-        <button class="spin-button" id="spin5Button">
-          <div class="spin-multiplier">x5</div>
-          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 5">
-          5 SPINS
-        </button>
-        <button class="spin-button" id="spin30Button">
-          <div class="spin-multiplier">x30</div>
-          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 30">
-          30 SPINS
+          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin">
+          SPIN (1 coup)
         </button>
         <button class="spin-button" id="spin50Button">
           <div class="spin-multiplier">x50</div>
@@ -1239,12 +1203,6 @@
     let autoSpinCount = 0;
     let isAutoSpinning = false;
 
-    // Variables pour la sauvegarde automatique
-    let gameState = {};
-    const SAVE_KEY = 'beeBeeGameSave';
-    let lastSaveTime = 0;
-    const SAVE_INTERVAL = 10000; // Sauvegarde toutes les 10 secondes
-
     const numberTypes = [
       { value: 0, name: 'Zéro', colorClass: 'number-0' },
       { value: 1, name: 'Un', colorClass: 'number-1' },
@@ -1271,9 +1229,7 @@
     const bonusContainer = document.getElementById("bonusContainer");
     const continueBtn = document.getElementById("continueBtn");
 
-    const spin1Button = document.getElementById("spin1Button");
-    const spin5Button = document.getElementById("spin5Button");
-    const spin30Button = document.getElementById("spin30Button");
+    const spinButton = document.getElementById("spinButton");
     const spin50Button = document.getElementById("spin50Button");
     const spin100Button = document.getElementById("spin100Button");
     const reel1 = document.getElementById("reel1");
@@ -1300,73 +1256,6 @@
       hard: "difficile",
       impossible: "impossible"
     };
-
-    // Fonctions de sauvegarde automatique
-    function saveGame() {
-      const currentTime = Date.now();
-      if (currentTime - lastSaveTime < SAVE_INTERVAL) {
-        return;
-      }
-      
-      gameState = {
-        maxHP,
-        currentHP,
-        coupCounter,
-        totalHits,
-        hitsUntilCoin,
-        attackMode,
-        rosesEarnedThisDiamond,
-        combo,
-        lastHitTime,
-        currentDifficulty,
-        bonusShown,
-        spinHitsCounter,
-        jackpotLevel,
-        spinJackpotRoses,
-        spinsCount,
-        lastSaveTime: currentTime
-      };
-      
-      try {
-        localStorage.setItem(SAVE_KEY, JSON.stringify(gameState));
-        lastSaveTime = currentTime;
-        console.log('Jeu sauvegardé automatiquement');
-      } catch (e) {
-        console.warn('Erreur lors de la sauvegarde:', e);
-      }
-    }
-
-    function loadGame() {
-      try {
-        const saved = localStorage.getItem(SAVE_KEY);
-        if (saved) {
-          gameState = JSON.parse(saved);
-          
-          maxHP = gameState.maxHP || maxHP;
-          currentHP = gameState.currentHP || currentHP;
-          coupCounter = gameState.coupCounter || coupCounter;
-          totalHits = gameState.totalHits || totalHits;
-          hitsUntilCoin = gameState.hitsUntilCoin || hitsUntilCoin;
-          attackMode = gameState.attackMode || attackMode;
-          rosesEarnedThisDiamond = gameState.rosesEarnedThisDiamond || rosesEarnedThisDiamond;
-          combo = gameState.combo || combo;
-          lastHitTime = gameState.lastHitTime || lastHitTime;
-          currentDifficulty = gameState.currentDifficulty || currentDifficulty;
-          bonusShown = gameState.bonusShown || bonusShown;
-          spinHitsCounter = gameState.spinHitsCounter || spinHitsCounter;
-          jackpotLevel = gameState.jackpotLevel || jackpotLevel;
-          spinJackpotRoses = gameState.spinJackpotRoses || spinJackpotRoses;
-          spinsCount = gameState.spinsCount || spinsCount;
-          lastSaveTime = gameState.lastSaveTime || Date.now();
-          
-          console.log('Jeu chargé depuis la sauvegarde');
-          return true;
-        }
-      } catch (e) {
-        console.warn('Erreur lors du chargement de la sauvegarde:', e);
-      }
-      return false;
-    }
 
     function getRandomNumber() {
       return Math.floor(Math.random() * numberTypes.length);
@@ -1402,11 +1291,9 @@
       autoSpinCount = count;
       
       // Désactiver tous les boutons de spin
-      spin1Button.disabled = true;
-      spin5Button.disabled = true;
-      spin30Button.disabled = true;
-      spin50Button.disabled = true;
-      spin100Button.disabled = true;
+      spinButton.disabled = true;
+      document.getElementById('spin50Button').disabled = true;
+      document.getElementById('spin100Button').disabled = true;
       
       for (let i = 0; i < count; i++) {
         console.log(`Spin ${i + 1}/${count}`);
@@ -1425,11 +1312,9 @@
       autoSpinCount = 0;
       
       // Réactiver les boutons
-      spin1Button.disabled = false;
-      spin5Button.disabled = false;
-      spin30Button.disabled = false;
-      spin50Button.disabled = false;
-      spin100Button.disabled = false;
+      spinButton.disabled = false;
+      document.getElementById('spin50Button').disabled = false;
+      document.getElementById('spin100Button').disabled = false;
     }
 
     function spinReels() {
@@ -1449,11 +1334,9 @@
         
         // Ne désactiver les boutons que si ce n'est pas un auto-spin
         if (!isAutoSpinning) {
-          spin1Button.disabled = true;
-          spin5Button.disabled = true;
-          spin30Button.disabled = true;
-          spin50Button.disabled = true;
-          spin100Button.disabled = true;
+          spinButton.disabled = true;
+          document.getElementById('spin50Button').disabled = true;
+          document.getElementById('spin100Button').disabled = true;
         }
 
         const reels = [reel1, reel2, reel3, reel4, reel5, reel6];
@@ -1485,11 +1368,9 @@
           
           // Ne réactiver les boutons que si ce n'est pas un auto-spin
           if (!isAutoSpinning) {
-            spin1Button.disabled = false;
-            spin5Button.disabled = false;
-            spin30Button.disabled = false;
-            spin50Button.disabled = false;
-            spin100Button.disabled = false;
+            spinButton.disabled = false;
+            document.getElementById('spin50Button').disabled = false;
+            document.getElementById('spin100Button').disabled = false;
           }
           
           checkSpinResult(finalNumbers);
@@ -1797,9 +1678,6 @@
           endGame();
         }
       }, animationDuration);
-      
-      // Sauvegarde automatique après chaque attaque
-      saveGame();
     }
 
     function showRoseGain(amount) {
@@ -1897,9 +1775,6 @@
       }, 500);
       
       comboIndicator.style.display = "none";
-      
-      // Sauvegarde après la fin du jeu
-      saveGame();
     }
 
     function setAttackMode(mode) {
@@ -1913,9 +1788,6 @@
       if (btnEl) btnEl.classList.add('active');
 
       attackBtn.textContent = `Attaquer (${mode} coup${mode > 1 ? 's' : ''})`;
-      
-      // Sauvegarde lors du changement de mode
-      saveGame();
     }
 
     function setDifficulty(difficulty) {
@@ -1948,49 +1820,37 @@
     }
 
     function initGame() {
-      // Essayer de charger une sauvegarde existante
-      const loaded = loadGame();
-      
-      if (!loaded) {
-        // Si pas de sauvegarde, initialiser avec les valeurs par défaut
-        switch(currentDifficulty) {
-          case "easy":
-            maxHP = 50000;
-            break;
-          case "medium":
-            maxHP = 100000;
-            break;
-          case "hard":
-            maxHP = 200000;
-            break;
-          case "impossible":
-            maxHP = 359000;
-            break;
-        }
-        
-        currentHP = maxHP;
-        coupCounter = 0;
-        totalHits = 0;
-        hitsUntilCoin = 4;
-        rosesEarnedThisDiamond = 0;
-        combo = 0;
-        lastHitTime = 0;
-        isAttacking = false;
-        bonusShown = false;
-        
-        spinHitsCounter = 0;
-        jackpotLevel = 0;
-        isSpinning = false;
-        spinJackpotRoses = 1000;
-        spinsCount = 0;
+      switch(currentDifficulty) {
+        case "easy":
+          maxHP = 50000;
+          break;
+        case "medium":
+          maxHP = 100000;
+          break;
+        case "hard":
+          maxHP = 200000;
+          break;
+        case "impossible":
+          maxHP = 359000;
+          break;
       }
       
-      // Réactiver les boutons de spin
-      spin1Button.disabled = false;
-      spin5Button.disabled = false;
-      spin30Button.disabled = false;
-      spin50Button.disabled = false;
-      spin100Button.disabled = false;
+      currentHP = maxHP;
+      coupCounter = 0;
+      totalHits = 0;
+      hitsUntilCoin = 4;
+      rosesEarnedThisDiamond = 0;
+      combo = 0;
+      lastHitTime = 0;
+      isAttacking = false;
+      bonusShown = false;
+      
+      spinHitsCounter = 0;
+      jackpotLevel = 0;
+      isSpinning = false;
+      spinButton.disabled = false;
+      spinJackpotRoses = 1000;
+      spinsCount = 0;
       
       const reels = [reel1, reel2, reel3, reel4, reel5, reel6];
       reels.forEach((reel, index) => {
@@ -2004,12 +1864,13 @@
       resultContainer.classList.add("hidden");
       bonusContainer.classList.add("hidden");
       comboIndicator.style.display = "none";
+
+      coupCounter = 0;
+      totalHits = 0;
+      hitsUntilCoin = 4;
       
       updateJackpotBar();
       updateSpinJackpotDisplay();
-      
-      // Sauvegarde après l'initialisation
-      saveGame();
     }
 
     // Écouteurs d'événements
@@ -2020,9 +1881,7 @@
     });
 
     // Écouteurs pour les boutons de spin
-    spin1Button.addEventListener("click", () => autoSpin(1));
-    spin5Button.addEventListener("click", () => autoSpin(5));
-    spin30Button.addEventListener("click", () => autoSpin(30));
+    spinButton.addEventListener("click", spinReels);
     spin50Button.addEventListener("click", () => autoSpin(50));
     spin100Button.addEventListener("click", () => autoSpin(100));
 
@@ -2100,13 +1959,7 @@
         combo = 0;
         comboIndicator.style.display = "none";
       }
-      
-      // Sauvegarde périodique
-      saveGame();
     }, 1000);
-
-    // Sauvegarde automatique lors de la fermeture de la page
-    window.addEventListener('beforeunload', saveGame);
 
     // Initialisation du jeu
     initGame();
