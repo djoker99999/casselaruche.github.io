@@ -397,11 +397,13 @@
       justify-content: center;
       padding: 10px;
       position: relative;
+      animation: floatZoom 3s ease-in-out infinite;
     }
 
     .attack-mode-image:hover {
       background: rgba(255, 255, 255, 0.2);
       transform: translateY(-3px);
+      animation: none;
     }
 
     .attack-mode-image.active {
@@ -409,6 +411,17 @@
       box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
       background: rgba(255, 255, 255, 0.3);
       transform: scale(1.05);
+      animation: activeFloatZoom 2s ease-in-out infinite;
+    }
+
+    @keyframes floatZoom {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-5px) scale(1.02); }
+    }
+
+    @keyframes activeFloatZoom {
+      0%, 100% { transform: translateY(0) scale(1.05); }
+      50% { transform: translateY(-8px) scale(1.08); }
     }
 
     .attack-mode-image img {
@@ -1117,6 +1130,16 @@
           <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin">
           SPIN (1 coup)
         </button>
+        <button class="spin-button" id="spin5Button">
+          <div class="spin-multiplier">x5</div>
+          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 5">
+          5 SPINS
+        </button>
+        <button class="spin-button" id="spin30Button">
+          <div class="spin-multiplier">x30</div>
+          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 30">
+          30 SPINS
+        </button>
         <button class="spin-button" id="spin50Button">
           <div class="spin-multiplier">x50</div>
           <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 50">
@@ -1230,6 +1253,8 @@
     const continueBtn = document.getElementById("continueBtn");
 
     const spinButton = document.getElementById("spinButton");
+    const spin5Button = document.getElementById("spin5Button");
+    const spin30Button = document.getElementById("spin30Button");
     const spin50Button = document.getElementById("spin50Button");
     const spin100Button = document.getElementById("spin100Button");
     const reel1 = document.getElementById("reel1");
@@ -1292,8 +1317,10 @@
       
       // Désactiver tous les boutons de spin
       spinButton.disabled = true;
-      document.getElementById('spin50Button').disabled = true;
-      document.getElementById('spin100Button').disabled = true;
+      spin5Button.disabled = true;
+      spin30Button.disabled = true;
+      spin50Button.disabled = true;
+      spin100Button.disabled = true;
       
       for (let i = 0; i < count; i++) {
         console.log(`Spin ${i + 1}/${count}`);
@@ -1313,8 +1340,10 @@
       
       // Réactiver les boutons
       spinButton.disabled = false;
-      document.getElementById('spin50Button').disabled = false;
-      document.getElementById('spin100Button').disabled = false;
+      spin5Button.disabled = false;
+      spin30Button.disabled = false;
+      spin50Button.disabled = false;
+      spin100Button.disabled = false;
     }
 
     function spinReels() {
@@ -1335,8 +1364,10 @@
         // Ne désactiver les boutons que si ce n'est pas un auto-spin
         if (!isAutoSpinning) {
           spinButton.disabled = true;
-          document.getElementById('spin50Button').disabled = true;
-          document.getElementById('spin100Button').disabled = true;
+          spin5Button.disabled = true;
+          spin30Button.disabled = true;
+          spin50Button.disabled = true;
+          spin100Button.disabled = true;
         }
 
         const reels = [reel1, reel2, reel3, reel4, reel5, reel6];
@@ -1369,8 +1400,10 @@
           // Ne réactiver les boutons que si ce n'est pas un auto-spin
           if (!isAutoSpinning) {
             spinButton.disabled = false;
-            document.getElementById('spin50Button').disabled = false;
-            document.getElementById('spin100Button').disabled = false;
+            spin5Button.disabled = false;
+            spin30Button.disabled = false;
+            spin50Button.disabled = false;
+            spin100Button.disabled = false;
           }
           
           checkSpinResult(finalNumbers);
@@ -1849,6 +1882,10 @@
       jackpotLevel = 0;
       isSpinning = false;
       spinButton.disabled = false;
+      spin5Button.disabled = false;
+      spin30Button.disabled = false;
+      spin50Button.disabled = false;
+      spin100Button.disabled = false;
       spinJackpotRoses = 1000;
       spinsCount = 0;
       
@@ -1882,6 +1919,8 @@
 
     // Écouteurs pour les boutons de spin
     spinButton.addEventListener("click", spinReels);
+    spin5Button.addEventListener("click", () => autoSpin(5));
+    spin30Button.addEventListener("click", () => autoSpin(30));
     spin50Button.addEventListener("click", () => autoSpin(50));
     spin100Button.addEventListener("click", () => autoSpin(100));
 
