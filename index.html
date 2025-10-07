@@ -924,6 +924,71 @@
       color: #FFD700;
     }
 
+    .custom-attack-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .custom-attack-input {
+      padding: 12px 15px;
+      border: 2px solid rgba(255, 215, 0, 0.5);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 14px;
+      width: 120px;
+      text-align: center;
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+    }
+
+    .custom-attack-input:focus {
+      outline: none;
+      border-color: rgba(255, 215, 0, 0.8);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .custom-attack-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .special-bubble {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background-image: url('https://i.ibb.co/3mxb1qbc/unnamed-1-Photoroom.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      pointer-events: none;
+      z-index: 6;
+      animation: bubbleFloat 2s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes bubbleFloat {
+      0% {
+        opacity: 0;
+        transform: translateY(0) scale(0.5);
+      }
+      20% {
+        opacity: 1;
+        transform: translateY(-20px) scale(1);
+      }
+      80% {
+        opacity: 1;
+        transform: translateY(-80px) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-100px) scale(0.8);
+      }
+    }
+
     @media (max-width: 480px) {
       .game-container {
         padding: 15px;
@@ -1006,6 +1071,15 @@
         width: 40px;
         height: 40px;
         font-size: 20px;
+      }
+
+      .custom-attack-container {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .custom-attack-input {
+        width: 100px;
       }
     }
 
@@ -1184,6 +1258,11 @@
       </div>
     </div>
 
+    <div class="custom-attack-container">
+      <input type="number" id="customAttackInput" class="custom-attack-input" placeholder="Nombre de coups" min="1" max="100000">
+      <button id="customAttackBtn">Attaque personnalisée</button>
+    </div>
+
     <div class="controls">
       <button id="attackBtn">Attaquer (1 coup)</button>
       <button id="resetBtn">Nouvelle Ruche</button>
@@ -1251,6 +1330,8 @@
     const particlesContainer = document.getElementById("particlesContainer");
     const bonusContainer = document.getElementById("bonusContainer");
     const continueBtn = document.getElementById("continueBtn");
+    const customAttackInput = document.getElementById("customAttackInput");
+    const customAttackBtn = document.getElementById("customAttackBtn");
 
     const spinButton = document.getElementById("spinButton");
     const spin5Button = document.getElementById("spin5Button");
@@ -1474,6 +1555,36 @@
       }, 2000);
     }
 
+    function createSpecialBubble() {
+      // Créer une bulle spéciale uniquement en mode hard ou impossible
+      if (currentDifficulty !== 'hard' && currentDifficulty !== 'impossible') return;
+      
+      // 20% de chance d'apparition
+      if (Math.random() > 0.2) return;
+      
+      const bubble = document.createElement('div');
+      bubble.className = 'special-bubble';
+      
+      const hiveRect = hive.getBoundingClientRect();
+      const containerRect = hive.parentElement.getBoundingClientRect();
+      
+      // Position aléatoire autour de la ruche
+      const x = hiveRect.left + (Math.random() * hiveRect.width) - containerRect.left;
+      const y = hiveRect.top + (Math.random() * hiveRect.height) - containerRect.top;
+      
+      bubble.style.left = x + 'px';
+      bubble.style.top = y + 'px';
+      
+      hive.parentElement.appendChild(bubble);
+      
+      // Supprimer la bulle après l'animation
+      setTimeout(() => {
+        if (bubble.parentElement) {
+          bubble.parentElement.removeChild(bubble);
+        }
+      }, 2000);
+    }
+
     function initAudioContext() {
       try {
         if (!audioContext) {
@@ -1626,12 +1737,12 @@
       }
     }
 
-    function attack() {
+    function attack(customHits = null) {
       if (currentHP <= 0 || isAttacking) return;
       
       isAttacking = true;
       
-      let hits = attackMode;
+      let hits = customHits || attackMode;
       let actualHits = 0;
       let rosesEarned = 0;
       let wasCracked = hive.classList.contains('cracked');
@@ -1641,28 +1752,29 @@
       playHitSound();
       createHitParticles();
       createImpactEffect();
+      createSpecialBubble(); // Ajouter la bulle spéciale
       updateCombo();
       
       let animationType = 'hit';
       let shakeType = 'screen-shake';
       let animationDuration = 400;
       
-      if (attackMode >= 1000) {
+      if (hits >= 1000) {
         animationType = 'ultra-hit';
         shakeType = 'ultra-shake';
         animationDuration = 1200;
-      } else if (attackMode >= 500) {
+      } else if (hits >= 500) {
         animationType = 'mega-hit';
         shakeType = 'mega-shake';
         animationDuration = 1000;
-      } else if (attackMode >= 100) {
+      } else if (hits >= 100) {
         animationType = 'critical-hit';
         shakeType = 'mega-shake';
         animationDuration = 800;
-      } else if (attackMode >= 30) {
+      } else if (hits >= 30) {
         animationType = 'heavy-hit';
         animationDuration = 600;
-      } else if (attackMode >= 10) {
+      } else if (hits >= 10) {
         animationType = 'heavy-hit';
         animationDuration = 600;
       }
@@ -1915,6 +2027,22 @@
     document.getElementById("resetBtn").addEventListener("click", initGame);
     document.getElementById("continueBtn").addEventListener("click", () => {
       bonusContainer.classList.add("hidden");
+    });
+
+    // Écouteur pour le bouton d'attaque personnalisée
+    customAttackBtn.addEventListener("click", () => {
+      const customHits = parseInt(customAttackInput.value);
+      if (customHits && customHits > 0) {
+        attack(customHits);
+        customAttackInput.value = "";
+      }
+    });
+
+    // Écouteur pour la touche Entrée dans le champ de saisie
+    customAttackInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        customAttackBtn.click();
+      }
     });
 
     // Écouteurs pour les boutons de spin
