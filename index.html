@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🍯Bienvenue à la ruche de Bee Bee</title>
   <style>
+    /* Tous les styles CSS précédents restent inchangés */
     * {
       margin: 0;
       padding: 0;
@@ -989,6 +990,38 @@
       }
     }
 
+    .custom-spin-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 15px 0;
+    }
+
+    .custom-spin-input {
+      padding: 12px 15px;
+      border: 2px solid rgba(255, 215, 0, 0.5);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 14px;
+      width: 120px;
+      text-align: center;
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+    }
+
+    .custom-spin-input:focus {
+      outline: none;
+      border-color: rgba(255, 215, 0, 0.8);
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .custom-spin-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
     @media (max-width: 480px) {
       .game-container {
         padding: 15px;
@@ -1079,6 +1112,15 @@
       }
 
       .custom-attack-input {
+        width: 100px;
+      }
+
+      .custom-spin-container {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .custom-spin-input {
         width: 100px;
       }
     }
@@ -1225,6 +1267,10 @@
           100 SPINS
         </button>
       </div>
+      <div class="custom-spin-container">
+        <input type="number" id="customSpinInput" class="custom-spin-input" placeholder="Nombre de spins" min="1" max="1000">
+        <button id="customSpinBtn">Spins personnalisés</button>
+      </div>
     </div>
 
     <div class="attack-modes">
@@ -1338,6 +1384,8 @@
     const spin30Button = document.getElementById("spin30Button");
     const spin50Button = document.getElementById("spin50Button");
     const spin100Button = document.getElementById("spin100Button");
+    const customSpinInput = document.getElementById("customSpinInput");
+    const customSpinBtn = document.getElementById("customSpinBtn");
     const reel1 = document.getElementById("reel1");
     const reel2 = document.getElementById("reel2");
     const reel3 = document.getElementById("reel3");
@@ -1402,6 +1450,7 @@
       spin30Button.disabled = true;
       spin50Button.disabled = true;
       spin100Button.disabled = true;
+      customSpinBtn.disabled = true;
       
       for (let i = 0; i < count; i++) {
         console.log(`Spin ${i + 1}/${count}`);
@@ -1425,6 +1474,7 @@
       spin30Button.disabled = false;
       spin50Button.disabled = false;
       spin100Button.disabled = false;
+      customSpinBtn.disabled = false;
     }
 
     function spinReels() {
@@ -1449,6 +1499,7 @@
           spin30Button.disabled = true;
           spin50Button.disabled = true;
           spin100Button.disabled = true;
+          customSpinBtn.disabled = true;
         }
 
         const reels = [reel1, reel2, reel3, reel4, reel5, reel6];
@@ -1485,6 +1536,7 @@
             spin30Button.disabled = false;
             spin50Button.disabled = false;
             spin100Button.disabled = false;
+            customSpinBtn.disabled = false;
           }
           
           checkSpinResult(finalNumbers);
@@ -1998,6 +2050,7 @@
       spin30Button.disabled = false;
       spin50Button.disabled = false;
       spin100Button.disabled = false;
+      customSpinBtn.disabled = false;
       spinJackpotRoses = 1000;
       spinsCount = 0;
       
@@ -2051,6 +2104,22 @@
     spin30Button.addEventListener("click", () => autoSpin(30));
     spin50Button.addEventListener("click", () => autoSpin(50));
     spin100Button.addEventListener("click", () => autoSpin(100));
+
+    // Écouteur pour le bouton de spins personnalisés
+    customSpinBtn.addEventListener("click", () => {
+      const customSpins = parseInt(customSpinInput.value);
+      if (customSpins && customSpins > 0) {
+        autoSpin(customSpins);
+        customSpinInput.value = "";
+      }
+    });
+
+    // Écouteur pour la touche Entrée dans le champ de spins personnalisés
+    customSpinInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        customSpinBtn.click();
+      }
+    });
 
     document.getElementById("mode1").addEventListener("click", () => setAttackMode(1));
     document.getElementById("mode10").addEventListener("click", () => setAttackMode(10));
