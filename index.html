@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🍯Bienvenue à la ruche de Bee Bee</title>
   <style>
-    /* Tous les styles CSS précédents restent inchangés */
+    /* Votre CSS existant reste inchangé */
     * {
       margin: 0;
       padding: 0;
@@ -484,6 +484,7 @@
       font-weight: bold;
       text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
       min-height: 25px;
+      color: #000; /* Changé en noir */
     }
 
     .result-box {
@@ -926,11 +927,7 @@
     }
 
     .custom-attack-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      margin: 15px 0;
+      display: none; /* Masqué */
     }
 
     .custom-attack-input {
@@ -1213,15 +1210,19 @@
     <div class="difficulty-selector">
       <div class="difficulty-btn easy active" data-difficulty="easy">
         <div class="difficulty-btn-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkZIBKVuctd-81US1fPCxkxx5qaA3KNSzRVw&s');"></div>
+        <div class="difficulty-btn-label">Facile</div>
       </div>
       <div class="difficulty-btn medium" data-difficulty="medium">
         <div class="difficulty-btn-image" style="background-image: url('https://p16-webcast.tiktokcdn.com/img/maliva/webcast-va/8520d47b59c202a4534c1560a355ae06~tplv-obj.webp');"></div>
+        <div class="difficulty-btn-label">Moyen</div>
       </div>
       <div class="difficulty-btn hard" data-difficulty="hard">
         <div class="difficulty-btn-image" style="background-image: url('https://i.ibb.co/JR5SS5vd/IMG-6570.png');"></div>
+        <div class="difficulty-btn-label">Difficile</div>
       </div>
       <div class="difficulty-btn impossible" data-difficulty="impossible">
         <div class="difficulty-btn-image" style="background-image: url('https://i.ibb.co/5XX6nS2W/unnamed-Photoroom.png');"></div>
+        <div class="difficulty-btn-label">Impossible</div>
       </div>
     </div>
     
@@ -1321,6 +1322,7 @@
       <div id="rewardImage" class="reward-image"></div>
       <p id="coinsResult" class="reward-text"></p>
       <div id="victoryMessage" class="victory-message"></div>
+      <button id="closeResultBtn" style="margin-top: 15px;">Continuer</button>
     </div>
 
     <div id="bonusContainer" class="hidden result-box">
@@ -1341,6 +1343,7 @@
     let audioContext = null;
     let currentDifficulty = "easy";
     let bonusShown = false;
+    let quarterMilestones = [];
 
     let spinHitsCounter = 0;
     const SPIN_HITS_NEEDED = 20;
@@ -1376,8 +1379,7 @@
     const particlesContainer = document.getElementById("particlesContainer");
     const bonusContainer = document.getElementById("bonusContainer");
     const continueBtn = document.getElementById("continueBtn");
-    const customAttackInput = document.getElementById("customAttackInput");
-    const customAttackBtn = document.getElementById("customAttackBtn");
+    const closeResultBtn = document.getElementById("closeResultBtn");
 
     const spinButton = document.getElementById("spinButton");
     const spin5Button = document.getElementById("spin5Button");
@@ -1409,6 +1411,13 @@
       medium: "moyen",
       hard: "difficile",
       impossible: "impossible"
+    };
+
+    const difficultyRewards = {
+      easy: "vous avez gagné un léon chaton",
+      medium: "la planète merveilleuse",
+      hard: "lion à gagner",
+      impossible: "100000 pièces"
     };
 
     function getRandomNumber() {
@@ -1444,7 +1453,6 @@
       isAutoSpinning = true;
       autoSpinCount = count;
       
-      // Désactiver tous les boutons de spin
       spinButton.disabled = true;
       spin5Button.disabled = true;
       spin30Button.disabled = true;
@@ -1457,7 +1465,6 @@
         
         await spinReels();
         
-        // Pause entre chaque spin pour qu'on puisse voir l'animation
         await new Promise(resolve => setTimeout(resolve, 400));
         
         autoSpinCount--;
@@ -1468,7 +1475,6 @@
       isAutoSpinning = false;
       autoSpinCount = 0;
       
-      // Réactiver les boutons
       spinButton.disabled = false;
       spin5Button.disabled = false;
       spin30Button.disabled = false;
@@ -1484,7 +1490,6 @@
           return;
         }
         
-        // Autoriser le spin même si isSpinning est vrai pendant l'auto-spin
         if (isSpinning && !isAutoSpinning) {
           resolve();
           return;
@@ -1492,7 +1497,6 @@
         
         isSpinning = true;
         
-        // Ne désactiver les boutons que si ce n'est pas un auto-spin
         if (!isAutoSpinning) {
           spinButton.disabled = true;
           spin5Button.disabled = true;
@@ -1520,16 +1524,13 @@
         setTimeout(() => {
           isSpinning = false;
           
-          // Incrémenter le compteur de spins
           spinsCount++;
           
-          // Ajouter 1 rose au jackpot tous les 5 coups
           if (spinsCount % 5 === 0) {
             spinJackpotRoses++;
             updateSpinJackpotDisplay();
           }
           
-          // Ne réactiver les boutons que si ce n'est pas un auto-spin
           if (!isAutoSpinning) {
             spinButton.disabled = false;
             spin5Button.disabled = false;
@@ -1551,32 +1552,26 @@
     }
 
     function checkSpinResult(finalNumbers) {
-      // Vérifier si les 6 chiffres forment la séquence gagnante : 2-5-0-4-8-4
       const winningSequence = [2, 5, 0, 4, 8, 4];
       const isJackpot = finalNumbers.every((num, index) => num === winningSequence[index]);
       
       if (isJackpot) {
-        // JACKPOT ! La séquence 250484 est complète
         message.textContent = `🎰 JACKPOT! 250484! Tu gagnes ${spinJackpotRoses} roses! 🎰`;
         createSound(800, 0.3, 'sine');
         setTimeout(() => createSound(1000, 0.2, 'sine'), 200);
         setTimeout(() => createSound(1200, 0.1, 'sine'), 400);
         
-        // Animation de victoire pour tous les rouleaux
         const reels = [reel1, reel2, reel3, reel4, reel5, reel6];
         reels.forEach(reel => {
           reel.classList.add('winning');
         });
         
-        // Donner le jackpot en roses
         rosesEarnedThisDiamond += spinJackpotRoses;
         showRoseGain(spinJackpotRoses);
         
-        // Réinitialiser le jackpot à 1000
         spinJackpotRoses = 1000;
         updateSpinJackpotDisplay();
         
-        // Réinitialiser l'animation après 2 secondes
         setTimeout(() => {
           reels.forEach(reel => {
             reel.classList.remove('winning');
@@ -1608,10 +1603,8 @@
     }
 
     function createSpecialBubble() {
-      // Créer une bulle spéciale uniquement en mode hard ou impossible
       if (currentDifficulty !== 'hard' && currentDifficulty !== 'impossible') return;
       
-      // 20% de chance d'apparition
       if (Math.random() > 0.2) return;
       
       const bubble = document.createElement('div');
@@ -1620,7 +1613,6 @@
       const hiveRect = hive.getBoundingClientRect();
       const containerRect = hive.parentElement.getBoundingClientRect();
       
-      // Position aléatoire autour de la ruche
       const x = hiveRect.left + (Math.random() * hiveRect.width) - containerRect.left;
       const y = hiveRect.top + (Math.random() * hiveRect.height) - containerRect.top;
       
@@ -1629,7 +1621,6 @@
       
       hive.parentElement.appendChild(bubble);
       
-      // Supprimer la bulle après l'animation
       setTimeout(() => {
         if (bubble.parentElement) {
           bubble.parentElement.removeChild(bubble);
@@ -1789,12 +1780,41 @@
       }
     }
 
-    function attack(customHits = null) {
+    function checkQuarterMilestone() {
+      if (currentDifficulty === 'hard') {
+        const hpPercentage = (currentHP / maxHP) * 100;
+        
+        const milestones = [75, 50, 25];
+        
+        for (const milestone of milestones) {
+          if (hpPercentage <= milestone && !quarterMilestones.includes(milestone)) {
+            quarterMilestones.push(milestone);
+            
+            rosesEarnedThisDiamond += 500;
+            
+            const milestoneDisplay = document.createElement('div');
+            milestoneDisplay.className = 'coins-display';
+            milestoneDisplay.textContent = `🎉 25% HP! +500 🪙`;
+            milestoneDisplay.style.background = 'linear-gradient(45deg, #FFD700, #FFA500)';
+            milestoneDisplay.style.fontSize = '16px';
+            hive.parentElement.appendChild(milestoneDisplay);
+            
+            setTimeout(() => {
+              milestoneDisplay.remove();
+            }, 2000);
+            
+            break;
+          }
+        }
+      }
+    }
+
+    function attack() {
       if (currentHP <= 0 || isAttacking) return;
       
       isAttacking = true;
       
-      let hits = customHits || attackMode;
+      let hits = attackMode;
       let actualHits = 0;
       let rosesEarned = 0;
       let wasCracked = hive.classList.contains('cracked');
@@ -1804,7 +1824,7 @@
       playHitSound();
       createHitParticles();
       createImpactEffect();
-      createSpecialBubble(); // Ajouter la bulle spéciale
+      createSpecialBubble();
       updateCombo();
       
       let animationType = 'hit';
@@ -1834,7 +1854,10 @@
       hive.classList.add(animationType);
       if (shakeType) gameContainer.classList.add(shakeType);
       
-      for (let i = 0; i < hits && currentHP > 0; i++) {
+      // CORRECTION : Calcul du nombre réel de coups possibles
+      let actualHitsPossible = Math.min(hits, currentHP);
+      
+      for (let i = 0; i < actualHitsPossible; i++) {
         coupCounter++;
         actualHits++;
         totalHits++;
@@ -1848,6 +1871,15 @@
           hitsUntilCoin = 4;
         }
       }
+      
+      // CORRECTION : Message si tous les coups n'ont pas pu être effectués
+      if (actualHitsPossible < hits) {
+        message.textContent = `⚡ ${actualHitsPossible} coups effectués (sur ${hits} demandés) - Ruche détruite !`;
+      } else {
+        message.textContent = `Ruche magique ${difficultyNames[currentDifficulty]} - À tout moment la ruche peut se briser...`;
+      }
+      
+      checkQuarterMilestone();
       
       updateJackpotBar();
 
@@ -1912,10 +1944,8 @@
       } else {
         if (maxHP - currentHP >= maxHP * 0.7) {
           hive.classList.add("cracked");
-          message.textContent = "⚠️ La ruche magique commence à se fissurer...";
         } else {
           hive.classList.remove("cracked");
-          message.textContent = `Ruche magique ${difficultyNames[currentDifficulty]} - À tout moment la ruche peut se briser...`;
         }
       }
     }
@@ -1929,25 +1959,25 @@
       switch(currentDifficulty) {
         case "easy":
           recompense = 1;
-          rewardText = "Léon chaton !";
+          rewardText = difficultyRewards.easy;
           victoryText = "Félicitations ! Tu as découvert un adorable compagnon !";
           rewardImg = rewardImages.easy;
           break;
         case "medium":
           recompense = 10000;
-          rewardText = "planète merveilleuse !";
+          rewardText = difficultyRewards.medium;
           victoryText = "Incroyable ! Tu as trouvé un trésor interstellaire !";
           rewardImg = rewardImages.medium;
           break;
         case "hard":
           recompense = 30000;
-          rewardText = "lion majestueux !";
+          rewardText = difficultyRewards.hard;
           victoryText = "Victoire totale ! Tu as dompté le roi de la jungle !";
           rewardImg = rewardImages.hard;
           break;
         case "impossible":
           recompense = 100000;
-          rewardText = "trésor ultime légendaire !";
+          rewardText = difficultyRewards.impossible;
           victoryText = "⚡ INCROYABLE ! Tu as accompli l'impossible ! ⚡";
           rewardImg = rewardImages.impossible;
           break;
@@ -2025,7 +2055,7 @@
           maxHP = 100000;
           break;
         case "hard":
-          maxHP = 200000;
+          maxHP = 125000;
           break;
         case "impossible":
           maxHP = 359000;
@@ -2041,6 +2071,7 @@
       lastHitTime = 0;
       isAttacking = false;
       bonusShown = false;
+      quarterMilestones = [];
       
       spinHitsCounter = 0;
       jackpotLevel = 0;
@@ -2075,46 +2106,31 @@
       updateSpinJackpotDisplay();
     }
 
-    // Écouteurs d'événements
     document.getElementById("attackBtn").addEventListener("click", attack);
     document.getElementById("resetBtn").addEventListener("click", initGame);
     document.getElementById("continueBtn").addEventListener("click", () => {
       bonusContainer.classList.add("hidden");
     });
-
-    // Écouteur pour le bouton d'attaque personnalisée
-    customAttackBtn.addEventListener("click", () => {
-      const customHits = parseInt(customAttackInput.value);
-      if (customHits && customHits > 0) {
-        attack(customHits);
-        customAttackInput.value = "";
-      }
+    document.getElementById("closeResultBtn").addEventListener("click", () => {
+      resultContainer.classList.add("hidden");
     });
 
-    // Écouteur pour la touche Entrée dans le champ de saisie
-    customAttackInput.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        customAttackBtn.click();
-      }
-    });
-
-    // Écouteurs pour les boutons de spin
     spinButton.addEventListener("click", spinReels);
     spin5Button.addEventListener("click", () => autoSpin(5));
     spin30Button.addEventListener("click", () => autoSpin(30));
     spin50Button.addEventListener("click", () => autoSpin(50));
     spin100Button.addEventListener("click", () => autoSpin(100));
 
-    // Écouteur pour le bouton de spins personnalisés
     customSpinBtn.addEventListener("click", () => {
       const customSpins = parseInt(customSpinInput.value);
-      if (customSpins && customSpins > 0) {
+      if (customSpins && customSpins > 0 && customSpins <= 1000) {
         autoSpin(customSpins);
         customSpinInput.value = "";
+      } else {
+        message.textContent = "Veuillez entrer un nombre entre 1 et 1000";
       }
     });
 
-    // Écouteur pour la touche Entrée dans le champ de spins personnalisés
     customSpinInput.addEventListener("keypress", (e) => {
       if (e.key === "Enter") {
         customSpinBtn.click();
@@ -2145,13 +2161,19 @@
           attack();
           break;
         case '1':
-          setAttackMode(1);
+          if (currentDifficulty !== 'hard' && currentDifficulty !== 'impossible') {
+            setAttackMode(1);
+          }
           break;
         case '2':
-          setAttackMode(10);
+          if (currentDifficulty !== 'hard' && currentDifficulty !== 'impossible') {
+            setAttackMode(10);
+          }
           break;
         case '3':
-          setAttackMode(30);
+          if (currentDifficulty !== 'hard' && currentDifficulty !== 'impossible') {
+            setAttackMode(30);
+          }
           break;
         case '4':
           setAttackMode(100);
@@ -2161,6 +2183,11 @@
           break;
         case '6':
           setAttackMode(1000);
+          break;
+        case '7':
+          if (currentDifficulty === 'hard' || currentDifficulty === 'impossible') {
+            setAttackMode(5000);
+          }
           break;
         case 'r':
         case 'R':
@@ -2197,7 +2224,6 @@
       }
     }, 1000);
 
-    // Initialisation du jeu
     initGame();
   </script>
 </body>
