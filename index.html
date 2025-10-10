@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🍯Bienvenue à la ruche de Bee Bee</title>
   <style>
-    /* Votre CSS existant reste inchangé */
     * {
       margin: 0;
       padding: 0;
@@ -484,7 +483,7 @@
       font-weight: bold;
       text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
       min-height: 25px;
-      color: #000; /* Changé en noir */
+      color: #000;
     }
 
     .result-box {
@@ -566,7 +565,7 @@
       top: 10px;
       right: 10px;
       background: linear-gradient(45deg, #ff6b9d, #c44569);
-      padding: 8px 15px;
+      padding: 8px;
       border-radius: 20px;
       font-weight: bold;
       font-size: 0.9em;
@@ -927,7 +926,7 @@
     }
 
     .custom-attack-container {
-      display: none; /* Masqué */
+      display: none;
     }
 
     .custom-attack-input {
@@ -1327,7 +1326,7 @@
 
     <div id="bonusContainer" class="hidden result-box">
       <h3>🎉 Bonus ! 🎉</h3>
-      <p class="reward-text">Vous avez gagné<br><strong style="font-size: 1.8em; color: #ffd700;">1000 pièces</strong></p>
+      <p class="reward-text">Vous avez gagné<br><strong style="font-size: 1.8em; color: #ffd700;" id="bonusAmount">500 pièces</strong></p>
       <button id="continueBtn" style="margin-top: 15px;">Continuer</button>
     </div>
   </div>
@@ -1344,6 +1343,7 @@
     let currentDifficulty = "easy";
     let bonusShown = false;
     let quarterMilestones = [];
+    let milestonesReached = [];
 
     let spinHitsCounter = 0;
     const SPIN_HITS_NEEDED = 20;
@@ -1380,6 +1380,7 @@
     const bonusContainer = document.getElementById("bonusContainer");
     const continueBtn = document.getElementById("continueBtn");
     const closeResultBtn = document.getElementById("closeResultBtn");
+    const bonusAmountElement = document.getElementById("bonusAmount");
 
     const spinButton = document.getElementById("spinButton");
     const spin5Button = document.getElementById("spin5Button");
@@ -1440,6 +1441,46 @@
       
       reel.classList.add(numberData.colorClass);
       reel.textContent = numberData.value;
+    }
+
+    function checkMilestoneBonus() {
+      // Seulement pour les difficultés difficile et impossible
+      if (currentDifficulty !== 'hard' && currentDifficulty !== 'impossible') return;
+      
+      const hpPercentage = (currentHP / maxHP) * 100;
+      const damageDone = 100 - hpPercentage;
+      
+      // Points de bonus tous les 15% de dégâts
+      const milestonePoints = [15, 30, 45, 60, 75, 90];
+      
+      for (const milestone of milestonePoints) {
+        if (damageDone >= milestone && !milestonesReached.includes(milestone)) {
+          milestonesReached.push(milestone);
+          
+          // Bonus de 500 pièces
+          rosesEarnedThisDiamond += 500;
+          
+          // Afficher la pop-up de bonus
+          showBonusPopup(500, `${milestone}% de dégâts accomplis!`);
+          
+          break;
+        }
+      }
+    }
+
+    function showBonusPopup(amount, reason) {
+      bonusAmountElement.textContent = `${amount} pièces`;
+      
+      // Mettre à jour le texte avec la raison du bonus
+      const bonusText = document.querySelector('#bonusContainer .reward-text');
+      bonusText.innerHTML = `${reason}<br><strong style="font-size: 1.8em; color: #ffd700;">${amount} pièces</strong>`;
+      
+      bonusContainer.classList.remove("hidden");
+      
+      // Son de bonus
+      createSound(800, 0.3, 'sine');
+      setTimeout(() => createSound(1000, 0.2, 'sine'), 200);
+      setTimeout(() => createSound(1200, 0.1, 'sine'), 400);
     }
 
     async function autoSpin(count) {
@@ -1854,7 +1895,6 @@
       hive.classList.add(animationType);
       if (shakeType) gameContainer.classList.add(shakeType);
       
-      // CORRECTION : Calcul du nombre réel de coups possibles
       let actualHitsPossible = Math.min(hits, currentHP);
       
       for (let i = 0; i < actualHitsPossible; i++) {
@@ -1872,13 +1912,7 @@
         }
       }
       
-      // CORRECTION : Message si tous les coups n'ont pas pu être effectués
-      if (actualHitsPossible < hits) {
-        message.textContent = `⚡ ${actualHitsPossible} coups effectués (sur ${hits} demandés) - Ruche détruite !`;
-      } else {
-        message.textContent = `Ruche magique ${difficultyNames[currentDifficulty]} - À tout moment la ruche peut se briser...`;
-      }
-      
+      checkMilestoneBonus();
       checkQuarterMilestone();
       
       updateJackpotBar();
@@ -1921,23 +1955,6 @@
     }
 
     function updateUI() {
-      const hpPercentage = (currentHP / maxHP) * 100;
-      if (hpPercentage <= 20 && !bonusShown && currentHP > 0) {
-        bonusShown = true;
-        
-        let bonusAmount = 1000;
-        if (currentDifficulty === 'hard' || currentDifficulty === 'impossible') {
-          bonusAmount = 2000;
-        }
-        
-        document.querySelector('#bonusContainer .reward-text').innerHTML = 
-          `Vous avez gagné<br><strong style="font-size: 1.8em; color: #ffd700;">${bonusAmount} pièces</strong>`;
-        
-        setTimeout(() => {
-          bonusContainer.classList.remove("hidden");
-        }, 500);
-      }
-      
       if (currentHP === 0) {
         hive.className = "hive broken " + currentDifficulty;
         message.textContent = "💥 La ruche magique s'est brisée !";
@@ -2072,6 +2089,7 @@
       isAttacking = false;
       bonusShown = false;
       quarterMilestones = [];
+      milestonesReached = [];
       
       spinHitsCounter = 0;
       jackpotLevel = 0;
