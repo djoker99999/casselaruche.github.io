@@ -1326,7 +1326,7 @@
 
     <div id="bonusContainer" class="hidden result-box">
       <h3>🎉 Bonus ! 🎉</h3>
-      <p class="reward-text">Vous avez gagné<br><strong style="font-size: 1.8em; color: #ffd700;" id="bonusAmount">500 pièces</strong></p>
+      <p class="reward-text">Bonus spécial!<br><strong style="font-size: 1.8em; color: #ffd700;" id="bonusAmount">500 pièces</strong></p>
       <button id="continueBtn" style="margin-top: 15px;">Continuer</button>
     </div>
   </div>
@@ -1461,19 +1461,19 @@
           rosesEarnedThisDiamond += 500;
           
           // Afficher la pop-up de bonus
-          showBonusPopup(500, `${milestone}% de dégâts accomplis!`);
+          showBonusPopup(500);
           
           break;
         }
       }
     }
 
-    function showBonusPopup(amount, reason) {
+    function showBonusPopup(amount) {
       bonusAmountElement.textContent = `${amount} pièces`;
       
-      // Mettre à jour le texte avec la raison du bonus
+      // MODIFICATION ICI : On affiche seulement le nombre de pièces sans la raison
       const bonusText = document.querySelector('#bonusContainer .reward-text');
-      bonusText.innerHTML = `${reason}<br><strong style="font-size: 1.8em; color: #ffd700;">${amount} pièces</strong>`;
+      bonusText.innerHTML = `Bonus spécial!<br><strong style="font-size: 1.8em; color: #ffd700;">${amount} pièces</strong>`;
       
       bonusContainer.classList.remove("hidden");
       
