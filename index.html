@@ -1225,54 +1225,13 @@
       </div>
     </div>
     
+    <!-- Ruche placée au-dessus des boutons d'attaque -->
     <div class="hive-container">
       <div class="hive easy" id="hive"></div>
       <div class="particles-container" id="particlesContainer"></div>
     </div>
 
-    <div class="spin-container">
-      <div class="spin-title">🔮 Trouve le code pour découvrir plein de lots de 1k à 10k tirage aléatoire 🔮</div>
-      <div class="spin-reels">
-        <div class="spin-reel" id="reel1">0</div>
-        <div class="spin-reel" id="reel2">1</div>
-        <div class="spin-reel" id="reel3">2</div>
-        <div class="spin-reel" id="reel4">3</div>
-        <div class="spin-reel" id="reel5">4</div>
-        <div class="spin-reel" id="reel6">5</div>
-      </div>
-      <div class="spin-buttons">
-        <button class="spin-button" id="spinButton">
-          <div class="spin-multiplier">x1</div>
-          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin">
-          SPIN (1 coup)
-        </button>
-        <button class="spin-button" id="spin5Button">
-          <div class="spin-multiplier">x5</div>
-          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 5">
-          5 SPINS
-        </button>
-        <button class="spin-button" id="spin30Button">
-          <div class="spin-multiplier">x30</div>
-          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 30">
-          30 SPINS
-        </button>
-        <button class="spin-button" id="spin50Button">
-          <div class="spin-multiplier">x50</div>
-          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 50">
-          50 SPINS
-        </button>
-        <button class="spin-button" id="spin100Button">
-          <div class="spin-multiplier">x100</div>
-          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 100">
-          100 SPINS
-        </button>
-      </div>
-      <div class="custom-spin-container">
-        <input type="number" id="customSpinInput" class="custom-spin-input" placeholder="Nombre de spins" min="1" max="1000">
-        <button id="customSpinBtn">Spins personnalisés</button>
-      </div>
-    </div>
-
+    <!-- Boutons d'attaque placés sous la ruche -->
     <div class="attack-modes">
       <div id="mode1" class="attack-mode-image active">
         <img src="https://i.ibb.co/VckYwyzJ/IMG-7367.png" alt="Rose - 1 coup">
@@ -1315,6 +1274,50 @@
     </div>
 
     <p id="message"></p>
+
+    <!-- Section de spin placée à la place de la ruche -->
+    <div class="spin-container">
+      <div class="spin-title">🔮 Trouve le code pour découvrir plein de lots de 1k à 10k tirage aléatoire 🔮</div>
+      <div class="spin-reels">
+        <div class="spin-reel" id="reel1">0</div>
+        <div class="spin-reel" id="reel2">1</div>
+        <div class="spin-reel" id="reel3">2</div>
+        <div class="spin-reel" id="reel4">3</div>
+        <div class="spin-reel" id="reel5">4</div>
+        <div class="spin-reel" id="reel6">5</div>
+      </div>
+      <div class="spin-buttons">
+        <button class="spin-button" id="spinButton">
+          <div class="spin-multiplier">x1</div>
+          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin">
+          SPIN (1 coup)
+        </button>
+        <button class="spin-button" id="spin5Button">
+          <div class="spin-multiplier">x5</div>
+          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 5">
+          5 SPINS
+        </button>
+        <button class="spin-button" id="spin30Button">
+          <div class="spin-multiplier">x30</div>
+          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 30">
+          30 SPINS
+        </button>
+        <button class="spin-button" id="spin50Button">
+          <div class="spin-multiplier">x50</div>
+          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 50">
+          50 SPINS
+        </button>
+        <button class="spin-button" id="spin100Button">
+          <div class="spin-multiplier">x100</div>
+          <img src="https://i.ibb.co/SwBGr05j/IMG-6181-Photoroom.png" alt="Spin 100">
+          100 SPINS
+        </button>
+      </div>
+      <div class="custom-spin-container">
+        <input type="number" id="customSpinInput" class="custom-spin-input" placeholder="Nombre de spins" min="1" max="1000">
+        <button id="customSpinBtn">Spins personnalisés</button>
+      </div>
+    </div>
 
     <div id="resultContainer" class="hidden result-box">
       <h3>🎉 Ruche Magique Détruite ! 🎉</h3>
